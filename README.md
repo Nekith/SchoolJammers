@@ -19,7 +19,7 @@ Windjammers in a school.
 
 ## Why in a school ?
 
-Because I wanted to take a theme from [One Game A Month](http://www.onegameamonth.com One Game A Month) and I couldn't find a theme for this idea.
+Because I wanted to take a theme from [One Game A Month](http://www.onegameamonth.com "One Game A Month") and I couldn't find a theme for this idea.
 So, I chose the low-brow comprehension of this theme : educational.
 
 ## Going technical
