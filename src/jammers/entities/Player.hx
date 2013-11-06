@@ -10,17 +10,18 @@ import flash.ui.Keyboard;
 import nekith.Entity;
 import jammers.Library;
 import jammers.scenes.Level;
+import jammers.entities.Disk;
 
 class Player extends Sprite implements Entity
 {
-    public inline static var SPEED = 1.3;
+    public inline static var SPEED_WALK = 1.3;
     
     public var zone : Rectangle;
     private var level : Level;
     private var num : Int;
     private var size : Point;
     private var force : Point;
-    private var isHolding : Bool;
+    private var holding : Int;
     private var shadow : Bitmap;
     private var sprite : Bitmap;
     private var anim : Int;
@@ -33,7 +34,7 @@ class Player extends Sprite implements Entity
         num = number;
         size = new Point(14, 20);
         force = new Point();
-        isHolding = false;
+        holding = 0;
         shadow = new Bitmap(Library.getInstance().shadow);
         shadow.x = -12;
         shadow.y = -8;
@@ -49,36 +50,41 @@ class Player extends Sprite implements Entity
     {
         force.x = 0;
         force.y = 0;
-        if (isHolding == false) {
+        movement();
+        collision();
+        disk();
+    }
+    
+    private function movement() : Void
+    {
+        if (holding == 0) {
             if (num == 1) {
                 if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
-                    force.x -= SPEED;
+                    force.x -= SPEED_WALK;
                 }
                 if (true == level.keys[Keyboard.D]) {
-                    force.x += SPEED;
+                    force.x += SPEED_WALK;
                 }
                 if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
-                    force.y -= SPEED;
+                    force.y -= SPEED_WALK;
                 }
                 if (true == level.keys[Keyboard.S]) {
-                    force.y += SPEED;
+                    force.y += SPEED_WALK;
                 }
             } else {
                 if (true == level.keys[Keyboard.LEFT]) {
-                    force.x -= SPEED;
+                    force.x -= SPEED_WALK;
                 }
                 if (true == level.keys[Keyboard.RIGHT]) {
-                    force.x += SPEED;
+                    force.x += SPEED_WALK;
                 }
                 if (true == level.keys[Keyboard.UP]) {
-                    force.y -= SPEED;
+                    force.y -= SPEED_WALK;
                 }
                 if (true == level.keys[Keyboard.DOWN]) {
-                    force.y += SPEED;
+                    force.y += SPEED_WALK;
                 }
             }
-            collision();
-            disk();
         }
     }
     
@@ -100,17 +106,36 @@ class Player extends Sprite implements Entity
     
     private function disk() : Void
     {
-        var rect : Rectangle = new Rectangle(x - size.x / 2, y - size.y / 2, size.x, size.y);
-        if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
-            level.disk.force.x = 0;
-            level.disk.force.y = 0;
-            level.disk.y = y;
-            if (num == 1) {
-                level.disk.x = x + 11;
-            } else {
-                level.disk.x = x - 11;
+        if (holding == 0) {
+            var rect : Rectangle = new Rectangle(x - size.x / 2, y - size.y / 2, size.x, size.y);
+            if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
+                level.disk.force.x = 0;
+                level.disk.force.y = 0;
+                level.disk.y = y;
+                if (num == 1) {
+                    level.disk.x = x + 11;
+                } else {
+                    level.disk.x = x - 11;
+                }
+                holding = 7;
             }
-            isHolding = true;
+        } else if (holding == 7) {
+            if (num == 1) {
+                if (true == level.keys[Keyboard.U]) {
+                    var direction : Float = 0;
+                    if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
+                        direction = -Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.S]) {
+                        direction = Math.PI / 4;
+                    }
+                    --holding;
+                    level.disk.speed += Disk.SPEED_INCREASE;
+                    level.disk.force = Point.polar(level.disk.speed, direction);
+                }
+            } else {
+            }
+        } else {
+            --holding;
         }
     }
     

@@ -11,7 +11,11 @@ import jammers.scenes.Level;
 
 class Disk extends Sprite implements Entity
 {
+    public inline static var SPEED_NORMAL = 1.5;
+    public inline static var SPEED_INCREASE = 0.15;
+    
     public var zone : Rectangle;
+    public var speed : Float;
     public var force : Point;
     public var size(default, null) : Point;
     private var level : Level;
@@ -24,7 +28,8 @@ class Disk extends Sprite implements Entity
     {
         super();
         zone = new Rectangle();
-        force = Point.polar(1.5, Math.PI / 4);
+        speed = SPEED_NORMAL;
+        force = Point.polar(speed, Math.PI / 4);
         size = new Point(16, 10);
         level = scene;
         sheet = diskBitmap;
