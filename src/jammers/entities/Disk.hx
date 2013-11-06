@@ -12,7 +12,7 @@ import jammers.scenes.Level;
 class Disk extends Sprite implements Entity
 {
     public inline static var SPEED_NORMAL = 1.5;
-    public inline static var SPEED_INCREASE = 0.15;
+    public inline static var SPEED_INCREASE = 0.17;
     
     public var zone : Rectangle;
     public var speed : Float;
@@ -67,7 +67,7 @@ class Disk extends Sprite implements Entity
     
     public function draw() : Void
     {
-        if (force.x != 0 && force.y != 0) {
+        if (force.x != 0 || force.y != 0) {
             var vy : Int = 0;
             ++anim;
             if (anim >= 30) {

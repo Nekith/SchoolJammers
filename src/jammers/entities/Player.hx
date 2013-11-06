@@ -14,7 +14,8 @@ import jammers.entities.Disk;
 
 class Player extends Sprite implements Entity
 {
-    public inline static var SPEED_WALK = 1.3;
+    public inline static var SPEED_WALK = 1.2;
+    public inline static var SPEED_DASH = 2.3;
     
     public var zone : Rectangle;
     private var level : Level;
@@ -22,6 +23,7 @@ class Player extends Sprite implements Entity
     private var size : Point;
     private var force : Point;
     private var holding : Int;
+    private var dashing : Int;
     private var shadow : Bitmap;
     private var sprite : Bitmap;
     private var anim : Int;
@@ -35,6 +37,7 @@ class Player extends Sprite implements Entity
         size = new Point(14, 20);
         force = new Point();
         holding = 0;
+        dashing = 0;
         shadow = new Bitmap(Library.getInstance().shadow);
         shadow.x = -12;
         shadow.y = -8;
@@ -48,41 +51,124 @@ class Player extends Sprite implements Entity
     
     public function update() : Void
     {
-        force.x = 0;
-        force.y = 0;
+        dash();
         movement();
         collision();
         disk();
     }
     
-    private function movement() : Void
+    private function dash() : Void
     {
-        if (holding == 0) {
+        if (dashing != 0) {
+            --dashing;
+            if (holding != 0) {
+                hold();
+            }
+        } else if (holding == 0) {
             if (num == 1) {
-                if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
-                    force.x -= SPEED_WALK;
-                }
-                if (true == level.keys[Keyboard.D]) {
-                    force.x += SPEED_WALK;
-                }
-                if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
-                    force.y -= SPEED_WALK;
-                }
-                if (true == level.keys[Keyboard.S]) {
-                    force.y += SPEED_WALK;
+                if (true == level.keys[Keyboard.Y]) {
+                    var direction : Float = -1;
+                    if ((true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) && (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W])) {
+                        direction = 5 * Math.PI / 4;
+                    } else if ((true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) && true == level.keys[Keyboard.D]) {
+                        direction = -Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.D] && true == level.keys[Keyboard.S]) {
+                        direction = Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.S] && (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A])) {
+                        direction = 3 * Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                        direction = Math.PI;
+                    } else if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
+                        direction = -Math.PI / 2;
+                    } else if (true == level.keys[Keyboard.D]) {
+                        direction = 0;
+                    } else if (true == level.keys[Keyboard.S]) {
+                        direction = Math.PI / 2;
+                    }
+                    if (direction != -1) {
+                        force = Point.polar(SPEED_DASH, direction);
+                        dashing = 20;
+                    }
                 }
             } else {
-                if (true == level.keys[Keyboard.LEFT]) {
-                    force.x -= SPEED_WALK;
+                if (true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
+                    var direction : Float = -1;
+                    if (true == level.keys[Keyboard.LEFT] && true == level.keys[Keyboard.UP]) {
+                        direction = 5 * Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.UP] && true == level.keys[Keyboard.RIGHT]) {
+                        direction = -Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.RIGHT] && true == level.keys[Keyboard.DOWN]) {
+                        direction = Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.DOWN] && true == level.keys[Keyboard.LEFT]) {
+                        direction = 3 * Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.LEFT]) {
+                        direction = Math.PI;
+                    } else if (true == level.keys[Keyboard.UP]) {
+                        direction = -Math.PI / 2;
+                    } else if (true == level.keys[Keyboard.RIGHT]) {
+                        direction = 0;
+                    } else if (true == level.keys[Keyboard.DOWN]) {
+                        direction = Math.PI / 2;
+                    }
+                    if (direction != -1) {
+                        force = Point.polar(SPEED_DASH, direction);
+                        dashing = 20;
+                    }
                 }
-                if (true == level.keys[Keyboard.RIGHT]) {
-                    force.x += SPEED_WALK;
-                }
-                if (true == level.keys[Keyboard.UP]) {
-                    force.y -= SPEED_WALK;
-                }
-                if (true == level.keys[Keyboard.DOWN]) {
-                    force.y += SPEED_WALK;
+            }
+        }
+    }
+    
+    private function movement() : Void
+    {
+        if (dashing == 0) {
+            force.x = 0;
+            force.y = 0;
+            if (holding == 0) {
+                if (num == 1) {
+                    var direction : Float = -1;
+                    if ((true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) && (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W])) {
+                        direction = 5 * Math.PI / 4;
+                    } else if ((true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) && true == level.keys[Keyboard.D]) {
+                        direction = -Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.D] && true == level.keys[Keyboard.S]) {
+                        direction = Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.S] && (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A])) {
+                        direction = 3 * Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                        direction = Math.PI;
+                    } else if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
+                        direction = -Math.PI / 2;
+                    } else if (true == level.keys[Keyboard.D]) {
+                        direction = 0;
+                    } else if (true == level.keys[Keyboard.S]) {
+                        direction = Math.PI / 2;
+                    }
+                    if (direction != -1) {
+                        force = Point.polar(SPEED_WALK, direction);
+                    }
+                } else {
+                    var direction : Float = -1;
+                    if (true == level.keys[Keyboard.LEFT]) {
+                        direction = Math.PI;
+                    } else if (true == level.keys[Keyboard.LEFT] && true == level.keys[Keyboard.UP]) {
+                        direction = 5 * Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.UP]) {
+                        direction = -Math.PI / 2;
+                    } else if (true == level.keys[Keyboard.UP] && true == level.keys[Keyboard.RIGHT]) {
+                        direction = -Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.RIGHT]) {
+                        direction = 0;
+                    } else if (true == level.keys[Keyboard.RIGHT] && true == level.keys[Keyboard.DOWN]) {
+                        direction = Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.DOWN]) {
+                        direction = Math.PI / 2;
+                    } else if (true == level.keys[Keyboard.DOWN] && true == level.keys[Keyboard.LEFT]) {
+                        direction = 3 * Math.PI / 4;
+                    }
+                    if (direction != -1) {
+                        force = Point.polar(SPEED_WALK, direction);
+                    }
                 }
             }
         }
@@ -109,33 +195,51 @@ class Player extends Sprite implements Entity
         if (holding == 0) {
             var rect : Rectangle = new Rectangle(x - size.x / 2, y - size.y / 2, size.x, size.y);
             if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
-                level.disk.force.x = 0;
-                level.disk.force.y = 0;
-                level.disk.y = y;
-                if (num == 1) {
-                    level.disk.x = x + 11;
-                } else {
-                    level.disk.x = x - 11;
-                }
-                holding = 7;
+                hold();
+                holding = 6;
             }
-        } else if (holding == 7) {
-            if (num == 1) {
-                if (true == level.keys[Keyboard.U]) {
-                    var direction : Float = 0;
-                    if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
-                        direction = -Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.S]) {
-                        direction = Math.PI / 4;
+        } else if (dashing == 0) {
+            if (holding == 6) {
+                if (num == 1) {
+                    if (true == level.keys[Keyboard.T]) {
+                        var direction : Float = 0;
+                        if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
+                            direction = -Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.S]) {
+                            direction = Math.PI / 4;
+                        }
+                        --holding;
+                        level.disk.speed += Disk.SPEED_INCREASE;
+                        level.disk.force = Point.polar(level.disk.speed, direction);
                     }
-                    --holding;
-                    level.disk.speed += Disk.SPEED_INCREASE;
-                    level.disk.force = Point.polar(level.disk.speed, direction);
+                } else {
+                    if (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O]) {
+                        var direction : Float = Math.PI;
+                        if (true == level.keys[Keyboard.UP]) {
+                            direction = 3 * Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.DOWN]) {
+                            direction = 5 * Math.PI / 4;
+                        }
+                        --holding;
+                        level.disk.speed += Disk.SPEED_INCREASE;
+                        level.disk.force = Point.polar(level.disk.speed, direction);
+                    }
                 }
             } else {
+                --holding;
             }
+        }
+    }
+    
+    private function hold() : Void
+    {
+        level.disk.force.x = 0;
+        level.disk.force.y = 0;
+        level.disk.y = y;
+        if (num == 1) {
+            level.disk.x = x + 11;
         } else {
-            --holding;
+            level.disk.x = x - 11;
         }
     }
     

@@ -2,7 +2,13 @@ package jammers;
 
 import flash.text.Font;
 import flash.display.BitmapData;
-import openfl.Assets;
+
+@:font("assets/slkscr.ttf") class PixelFont extends Font { }
+@:bitmap("assets/gfx/players.png") class BitmapPlayers extends BitmapData { }
+@:bitmap("assets/gfx/shadow.png") class BitmapShadow extends BitmapData { }
+@:bitmap("assets/gfx/playground/background.png") class BitmapPlaygroundBackground extends BitmapData { }
+@:bitmap("assets/gfx/playground/foreground.png") class BitmapPlaygroundForeground extends BitmapData { }
+@:bitmap("assets/gfx/playground/disk.png") class BitmapPlaygroundDisk extends BitmapData { }
 
 class Library
 {
@@ -25,11 +31,11 @@ class Library
     
     private function new()
     {
-        font = Assets.getFont("assets/slkscr.ttf");
-        players = Assets.getBitmapData("assets/gfx/players.png");
-        shadow = Assets.getBitmapData("assets/gfx/shadow.png");
-        playgroundBackground = Assets.getBitmapData("assets/gfx/playground/background.png");
-        playgroundForeground = Assets.getBitmapData("assets/gfx/playground/foreground.png");
-        playgroundDisk = Assets.getBitmapData("assets/gfx/playground/disk.png");
+        font = new PixelFont();
+        players = new BitmapPlayers(0, 0);
+        shadow = new BitmapShadow(0, 0);
+        playgroundBackground = new BitmapPlaygroundBackground(0, 0);
+        playgroundForeground = new BitmapPlaygroundForeground(0, 0);
+        playgroundDisk = new BitmapPlaygroundDisk(0, 0);
     }
 }

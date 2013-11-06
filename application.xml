@@ -19,7 +19,6 @@
 	
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />
-    <assets path="assets" />
 	
 	<!-- optimize output
 	<haxeflag name="-dce full" /> -->
