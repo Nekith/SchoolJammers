@@ -3,14 +3,14 @@
 Entry for [One Game A Month](http://www.onegameamonth.com "One Game A Month") June 2013.
 Yeah, in November.
 
-And I just decided that it will also be a [Game Boy Jam 2]http://gbjam.net "Game Boy Jam") entry.
+And I just decided that it will also be a [Game Boy Jam 2](http://gbjam.net "Game Boy Jam") entry.
 
 I'm going for three days for the first version.
 Maybe I'll continue it after.
 
 ## What ?
 
-I just discovered Windjammers (Flying Power Disc), a Neo Geo game from 1994.
+I've just discovered Windjammers (Flying Power Disc), a Neo Geo game from 1994.
 But I didn't played it yet, I just watched videos and tournaments and stuff.
 And I read some description/rules on Wikipedia.
 

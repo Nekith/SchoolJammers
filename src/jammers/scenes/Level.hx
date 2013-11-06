@@ -3,6 +3,7 @@ package jammers.scenes;
 import flash.geom.Point;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.display.Sprite;
 import nekith.Scene;
 import jammers.UserInterface;
 import jammers.entities.Disk;
@@ -10,28 +11,31 @@ import jammers.entities.Player;
 
 class Level extends Scene
 {
+    public var shadows : Sprite;
+    public var disk(default, null) : Disk;
+    public var playerOne(default, null) : Player;
     private var background : Bitmap;
     private var foreground : Bitmap;
-    private var disk(default, null) : Disk;
-    private var playerOne(default, null) : Player;
     
     private function new(diskBitmap : BitmapData)
     {
         super();
         dimension = new Point(180, 144);
-        background = new Bitmap();
-        background.x = -10;
-        addChild(background);
-        playerOne = new Player(1);
+        shadows = new Sprite();
+        disk = new Disk(this, diskBitmap);
+        disk.x = 120;
+        disk.y = 60;
+        playerOne = new Player(this, 1);
         playerOne.x = 32;
         playerOne.y = 32;
-        addChild(playerOne);
-        disk = new Disk(diskBitmap);
-        disk.x = 32;
-        disk.y = 32;
-        addChild(disk);
+        background = new Bitmap();
+        background.x = -10;
         foreground = new Bitmap();
         foreground.x = -10;
+        addChild(background);
+        addChild(shadows);
+        addChild(disk);
+        addChild(playerOne);
         addChild(foreground);
     }
     
@@ -39,8 +43,8 @@ class Level extends Scene
     {
         super.update();
         if (true == focus) {
-            disk.update(this);
-            playerOne.update(this);
+            disk.update();
+            playerOne.update();
         }
         return this;
     }

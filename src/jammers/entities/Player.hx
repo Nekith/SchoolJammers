@@ -16,63 +16,70 @@ class Player extends Sprite implements Entity
     public inline static var SPEED = 1.3;
     
     public var zone : Rectangle;
-    private var size : Point;
+    private var level : Level;
     private var num : Int;
+    private var size : Point;
+    private var force : Point;
+    private var isHolding : Bool;
     private var shadow : Bitmap;
     private var sprite : Bitmap;
-    private var force : Point;
     private var anim : Int;
     
-    public function new(number : Int)
+    public function new(scene : Level, number : Int)
     {
         super();
         zone = new Rectangle(0, 0, 0, 0);
-        size = new Point(14, 20);
+        level = scene;
         num = number;
+        size = new Point(14, 20);
+        force = new Point();
+        isHolding = false;
         shadow = new Bitmap(Library.getInstance().shadow);
         shadow.x = -12;
         shadow.y = -8;
-        addChild(shadow);
+        level.shadows.addChild(shadow);
         sprite = new Bitmap(new BitmapData(16, 24, true));
         sprite.x = -7;
         sprite.y = -21;
         addChild(sprite);
-        force = new Point();
         anim = 0;
     }
     
-    public function update(scene : Level) : Void
+    public function update() : Void
     {
         force.x = 0;
         force.y = 0;
-        if (num == 1) {
-            if (true == scene.keys[Keyboard.Q] || true == scene.keys[Keyboard.A]) {
-                force.x -= SPEED;
+        if (isHolding == false) {
+            if (num == 1) {
+                if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                    force.x -= SPEED;
+                }
+                if (true == level.keys[Keyboard.D]) {
+                    force.x += SPEED;
+                }
+                if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
+                    force.y -= SPEED;
+                }
+                if (true == level.keys[Keyboard.S]) {
+                    force.y += SPEED;
+                }
+            } else {
+                if (true == level.keys[Keyboard.LEFT]) {
+                    force.x -= SPEED;
+                }
+                if (true == level.keys[Keyboard.RIGHT]) {
+                    force.x += SPEED;
+                }
+                if (true == level.keys[Keyboard.UP]) {
+                    force.y -= SPEED;
+                }
+                if (true == level.keys[Keyboard.DOWN]) {
+                    force.y += SPEED;
+                }
             }
-            if (true == scene.keys[Keyboard.D]) {
-                force.x += SPEED;
-            }
-            if (true == scene.keys[Keyboard.Z] || true == scene.keys[Keyboard.W]) {
-                force.y -= SPEED;
-            }
-            if (true == scene.keys[Keyboard.S]) {
-                force.y += SPEED;
-            }
-        } else {
-            if (true == scene.keys[Keyboard.LEFT]) {
-                force.x -= SPEED;
-            }
-            if (true == scene.keys[Keyboard.RIGHT]) {
-                force.x += SPEED;
-            }
-            if (true == scene.keys[Keyboard.UP]) {
-                force.y -= SPEED;
-            }
-            if (true == scene.keys[Keyboard.DOWN]) {
-                force.y += SPEED;
-            }
+            collision();
+            disk();
         }
-        collision();
     }
     
     private function collision() : Void
@@ -88,6 +95,22 @@ class Player extends Sprite implements Entity
             y = zone.y + size.y / 2;
         } else if (y + size.y / 2 > zone.y + zone.height) {
             y = zone.y + zone.height - size.y / 2;
+        }
+    }
+    
+    private function disk() : Void
+    {
+        var rect : Rectangle = new Rectangle(x - size.x / 2, y - size.y / 2, size.x, size.y);
+        if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
+            level.disk.force.x = 0;
+            level.disk.force.y = 0;
+            level.disk.y = y;
+            if (num == 1) {
+                level.disk.x = x + 11;
+            } else {
+                level.disk.x = x - 11;
+            }
+            isHolding = true;
         }
     }
     
@@ -114,11 +137,13 @@ class Player extends Sprite implements Entity
             vx = 16;
         }
         sprite.bitmapData.copyPixels(Library.getInstance().players, new Rectangle(vx, vy, 16, 24), new Point(0, 0));
+        shadow.x = x - 12;
+        shadow.y = y - 8;
     }
     
     public function clean() : Void
     {
-        removeChild(shadow);
+        level.shadows.removeChild(shadow);
         removeChild(sprite);
     }
 }
