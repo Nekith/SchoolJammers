@@ -88,6 +88,7 @@ class Player extends Sprite implements Entity
                     if (direction != -1) {
                         force = Point.polar(SPEED_DASH, direction);
                         dashing = 20;
+                        Library.getInstance().soundDash.play();
                     }
                 }
             } else {
@@ -113,6 +114,7 @@ class Player extends Sprite implements Entity
                     if (direction != -1) {
                         force = Point.polar(SPEED_DASH, direction);
                         dashing = 20;
+                        Library.getInstance().soundDash.play();
                     }
                 }
             }
@@ -197,6 +199,7 @@ class Player extends Sprite implements Entity
             if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
                 hold();
                 holding = 6;
+                Library.getInstance().soundCatch.play();
             }
         } else if (dashing == 0) {
             if (holding == 6) {
@@ -204,25 +207,51 @@ class Player extends Sprite implements Entity
                     if (true == level.keys[Keyboard.T]) {
                         var direction : Float = 0;
                         if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
-                            direction = -Math.PI / 4;
+                            if (true == level.keys[Keyboard.D]) {
+                                direction = -Math.PI / 6;
+                            } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                                direction = -Math.PI / 3;
+                            } else {
+                                direction = -Math.PI / 4;
+                            }
                         } else if (true == level.keys[Keyboard.S]) {
-                            direction = Math.PI / 4;
+                            if (true == level.keys[Keyboard.D]) {
+                                direction = Math.PI / 6;
+                            } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                                direction = Math.PI / 3;
+                            } else {
+                                direction = Math.PI / 4;
+                            }
                         }
                         --holding;
                         level.disk.speed += Disk.SPEED_INCREASE;
                         level.disk.force = Point.polar(level.disk.speed, direction);
+                        Library.getInstance().soundThrow.play();
                     }
                 } else {
                     if (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O]) {
                         var direction : Float = Math.PI;
                         if (true == level.keys[Keyboard.UP]) {
-                            direction = 3 * Math.PI / 4;
+                            if (true == level.keys[Keyboard.RIGHT]) {
+                                direction = -2 * Math.PI / 3;
+                            } else if (true == level.keys[Keyboard.LEFT]) {
+                                direction = -5 * Math.PI / 6;
+                            } else {
+                                direction = -3 * Math.PI / 4;
+                            }
                         } else if (true == level.keys[Keyboard.DOWN]) {
-                            direction = 5 * Math.PI / 4;
+                            if (true == level.keys[Keyboard.RIGHT]) {
+                                direction = 4 * Math.PI / 3;
+                            } else if (true == level.keys[Keyboard.LEFT]) {
+                                direction = 7 * Math.PI / 6;
+                            } else {
+                                direction = 5 * Math.PI / 4;
+                            }
                         }
                         --holding;
                         level.disk.speed += Disk.SPEED_INCREASE;
                         level.disk.force = Point.polar(level.disk.speed, direction);
+                        Library.getInstance().soundThrow.play();
                     }
                 }
             } else {

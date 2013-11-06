@@ -59,9 +59,11 @@ class Disk extends Sprite implements Entity
         if (y - size.y / 2 < zone.y) {
             y = zone.y + size.y / 2;
             force.y = -force.y;
+            Library.getInstance().soundBounce.play();
         } else if (y + size.y / 2 > zone.y + zone.height) {
             y = zone.y + zone.height - size.y / 2;
             force.y = -force.y;
+            Library.getInstance().soundBounce.play();
         }
     }
     
