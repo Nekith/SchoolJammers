@@ -84,7 +84,7 @@ class Selection extends Scene
         characterBigName.embedFonts = true;
         characterBigName.defaultTextFormat = tfBig;
         characterBigName.selectable = false;
-        characterBigName.text = "Kevin\nStrong";
+        characterBigName.text = "Chuck\nStrong";
         characterBigName.x = 104;
         characterBigName.y = 50;
         characterBigName.width = 43;
