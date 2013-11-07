@@ -31,6 +31,7 @@ class Level extends Scene
     private var roundsOne : Int;
     private var roundsTwo : Int;
     private var rounds : Shape;
+    private var shaking : Int;
     private var ended : Int;
     private var channel : SoundChannel;
     
@@ -40,6 +41,7 @@ class Level extends Scene
         dimension = new Point(180, 144);
         shadows = new Sprite();
         breakTime = 0;
+        shaking = 0;
         ended = -1;
         // disk
         disk = new Disk(this, diskBitmap);
@@ -132,6 +134,17 @@ class Level extends Scene
     
     public function goal(num : Int, add : Int) : Void
     {
+        playerOne.stop();
+        playerTwo.stop();
+        if (add == 3) {
+            Library.getInstance().soundGoal.play();
+            shaking = 4;
+            if (num == 1) {
+                x = 10;
+            } else {
+                x = -10;
+            }
+        }
         if (num == 1) {
             var score : Int = Std.parseInt(scoreOne.text) + add;
             scoreOne.text = Std.string(score);
@@ -158,8 +171,7 @@ class Level extends Scene
         playerOne.y = 73;
         playerTwo.x = 150;
         playerTwo.y = 73;
-        disk.force.x = 0;
-        disk.force.y = 0;
+        disk.stop();
         if (num == 1) {
             disk.x = 20;
             disk.y = 73;
@@ -181,8 +193,7 @@ class Level extends Scene
                 g.drawRect(70 - i * 3, 2, 2, 2);
             }
             if (roundsOne == 2) {
-                disk.force.x = 0;
-                disk.force.y = 0;
+                disk.stop();
                 ended = 120;
             } else {
                 serve(2);
@@ -195,8 +206,7 @@ class Level extends Scene
                 g.drawRect(90 + i * 3, 2, 2, 2);
             }
             if (roundsTwo == 2) {
-                disk.force.x = 0;
-                disk.force.y = 0;
+                disk.stop();
                 ended = 120;
             } else {
                 serve(1);
@@ -208,6 +218,21 @@ class Level extends Scene
     {
         super.draw();
         if (true == focus) {
+            if (x > 0) {
+                if (shaking == 0) {
+                    x = 1 - x;
+                    shaking = 4;
+                } else {
+                    --shaking;
+                }
+            } else if (x < 0) {
+                if (shaking == 0) {
+                    x = -1 - x;
+                    shaking = 4;
+                } else {
+                    --shaking;
+                }
+            }
             disk.draw();
             playerOne.draw();
             playerTwo.draw();
@@ -224,5 +249,7 @@ class Level extends Scene
         removeChild(playerOne);
         removeChild(disk);
         removeChild(foreground);
+        channel.stop();
+        channel.removeEventListener(Event.SOUND_COMPLETE, music);
     }
 }

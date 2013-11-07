@@ -12,14 +12,16 @@ import jammers.scenes.Level;
 class Disk extends Sprite implements Entity
 {
     public inline static var SPEED_NORMAL = 1.5;
+    public inline static var SPEED_POWER = 3.5;
     public inline static var SPEED_TOSS = 1.5;
     public inline static var SPEED_INCREASE = 0.17;
     
     public var zone : Rectangle;
     public var size(default, null) : Point;
     public var speed : Float;
+    public var innerForce : Float;
     public var force : Point;
-    public var tossing(default, null) : Int;
+    public var tossing : Int;
     private var level : Level;
     private var sheet : BitmapData;
     private var shadow : Bitmap;
@@ -32,6 +34,7 @@ class Disk extends Sprite implements Entity
         zone = new Rectangle();
         size = new Point(16, 10);
         speed = SPEED_NORMAL;
+        innerForce = SPEED_NORMAL;
         force = Point.polar(speed, Math.PI / 4);
         tossing = 0;
         level = scene;
@@ -68,7 +71,11 @@ class Disk extends Sprite implements Entity
         }
         if (tossing != 0) {
             --tossing;
-            if (tossing == 0 && (force.x != 0 || force.y != 0)) {
+            if (tossing == 0) {
+                tossing = -1;
+            }
+            if (tossing == -10 && (force.x != 0 || force.y != 0)) {
+                tossing = 0;
                 if (level.playerOne.zone.contains(x, y) == true) {
                     level.goal(2, 2);
                 } else {
@@ -80,15 +87,31 @@ class Disk extends Sprite implements Entity
     
     public function toss(direction : Float) : Void
     {
-        level.disk.speed = Disk.SPEED_TOSS;
+        innerForce = level.disk.speed - SPEED_INCREASE * 2;
+        level.disk.speed = SPEED_TOSS;
         level.disk.tossing = 60;
         force = Point.polar(speed, direction);
     }
     
     public function normalThrow(direction : Float) : Void
     {
-        speed += Disk.SPEED_INCREASE;
+        speed = innerForce + SPEED_INCREASE;
+        innerForce = speed;
         force = Point.polar(speed, direction);
+    }
+    
+    public function powerThrow(direction : Float) : Void
+    {
+        speed = SPEED_POWER;
+        force = Point.polar(speed, direction);
+    }
+    
+    public function stop() : Void
+    {
+        force.x = 0;
+        force.y = 0;
+        innerForce = SPEED_NORMAL;
+        speed = SPEED_NORMAL;
     }
     
     public function draw() : Void

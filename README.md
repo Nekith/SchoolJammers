@@ -5,8 +5,30 @@ Yeah, in November.
 
 And I just decided that it will also be a [Game Boy Jam 2](http://gbjam.net "Game Boy Jam") entry.
 
-I'm going for three days for the first version.
-Maybe I'll continue it after.
+I'm going for three days working on it.
+
+## How To Play
+
+You need two players on the same computer.
+And a keyboard handling several key strokes simultaneously.
+
+### Controls
+
+Player 1 :
+
+* W/Z Q/A S D : movement / throw direction
+* T : throw / charging
+* Y : toss / dash
+
+### Rules
+
+Incoming.
+
+* Normal throw
+* Dash
+* Toss
+* Power throw
+* Counter power throw
 
 ## What ?
 
@@ -25,11 +47,23 @@ Windjammers in a school.
 Because I wanted to take a theme from One Game A Month and I couldn't find a theme for this idea.
 So, I chose the low-brow comprehension of this theme : educational.
 
-## The "If I Had More Time" Ideas
-
-Incoming.
-
 ## Going Technical
 
 * haxe
 * openfl
+
+## License 
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
+                        Version 2, December 2004 
+
+     Copyright (C) 2004 Sam Hocevar <sam@hocevar.net> 
+
+     Everyone is permitted to copy and distribute verbatim or modified 
+     copies of this license document, and changing it is allowed as long 
+     as the name is changed. 
+
+                DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
+       TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
+
+      0. You just DO WHAT THE FUCK YOU WANT TO.

@@ -61,5 +61,6 @@ class MainMenu extends Scene
         removeChild(background);
         removeChild(space);
         channel.stop();
+        channel.removeEventListener(Event.SOUND_COMPLETE, music);
     }
 }

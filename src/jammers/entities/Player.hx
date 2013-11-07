@@ -16,28 +16,34 @@ class Player extends Sprite implements Entity
 {
     public inline static var SPEED_WALK = 1.2;
     public inline static var SPEED_DASH = 2.3;
+    public inline static var STRENGTH = 3.5;
     
     public var zone : Rectangle;
+    public var force : Point;
     private var level : Level;
     private var num : Int;
     private var size : Point;
-    private var force : Point;
     private var holding : Int;
     private var dashing : Int;
+    private var stunned : Int;
+    private var charging : Int;
     private var shadow : Bitmap;
     private var sprite : Bitmap;
+    private var stunEffect : Bitmap;
     private var anim : Int;
     
     public function new(scene : Level, number : Int)
     {
         super();
         zone = new Rectangle(0, 0, 0, 0);
+        force = new Point();
         level = scene;
         num = number;
         size = new Point(14, 20);
-        force = new Point();
         holding = 0;
         dashing = 0;
+        stunned = 0;
+        charging = 0;
         shadow = new Bitmap(Library.getInstance().shadow);
         shadow.x = -12;
         shadow.y = -8;
@@ -46,6 +52,11 @@ class Player extends Sprite implements Entity
         sprite.x = -7;
         sprite.y = -21;
         addChild(sprite);
+        stunEffect = new Bitmap(new BitmapData(16, 16, true));
+        stunEffect.x = -8;
+        stunEffect.y = -28;
+        stunEffect.alpha = 0;
+        addChild(stunEffect);
         anim = 0;
     }
     
@@ -64,7 +75,7 @@ class Player extends Sprite implements Entity
             if (holding != 0) {
                 hold();
             }
-        } else if (holding == 0) {
+        } else if (holding == 0 && stunned == 0) {
             if (num == 1) {
                 if (true == level.keys[Keyboard.Y]) {
                     var direction : Float = -1;
@@ -126,53 +137,63 @@ class Player extends Sprite implements Entity
         if (dashing == 0 && level.breakTime == 0) {
             force.x = 0;
             force.y = 0;
-            if (holding == 0) {
+            if (holding == 0 && stunned == 0) {
                 if (num == 1) {
-                    var direction : Float = -1;
-                    if ((true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) && (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W])) {
-                        direction = 5 * Math.PI / 4;
-                    } else if ((true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) && true == level.keys[Keyboard.D]) {
-                        direction = -Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.D] && true == level.keys[Keyboard.S]) {
-                        direction = Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.S] && (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A])) {
-                        direction = 3 * Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
-                        direction = Math.PI;
-                    } else if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
-                        direction = -Math.PI / 2;
-                    } else if (true == level.keys[Keyboard.D]) {
-                        direction = 0;
-                    } else if (true == level.keys[Keyboard.S]) {
-                        direction = Math.PI / 2;
-                    }
-                    if (direction != -1) {
-                        force = Point.polar(SPEED_WALK, direction);
+                    if (false == level.keys[Keyboard.T]) {
+                        var direction : Float = -1;
+                        if ((true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) && (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W])) {
+                            direction = 5 * Math.PI / 4;
+                        } else if ((true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) && true == level.keys[Keyboard.D]) {
+                            direction = -Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.D] && true == level.keys[Keyboard.S]) {
+                            direction = Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.S] && (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A])) {
+                            direction = 3 * Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                            direction = Math.PI;
+                        } else if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
+                            direction = -Math.PI / 2;
+                        } else if (true == level.keys[Keyboard.D]) {
+                            direction = 0;
+                        } else if (true == level.keys[Keyboard.S]) {
+                            direction = Math.PI / 2;
+                        }
+                        if (direction != -1) {
+                            force = Point.polar(SPEED_WALK, direction);
+                            charging = 0;
+                        }
                     }
                 } else {
-                    var direction : Float = -1;
-                    if (true == level.keys[Keyboard.LEFT] && true == level.keys[Keyboard.UP]) {
-                        direction = 5 * Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.UP] && true == level.keys[Keyboard.RIGHT]) {
-                        direction = -Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.RIGHT] && true == level.keys[Keyboard.DOWN]) {
-                        direction = Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.DOWN] && true == level.keys[Keyboard.LEFT]) {
-                        direction = 3 * Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.LEFT]) {
-                        direction = Math.PI;
-                    } else if (true == level.keys[Keyboard.UP]) {
-                        direction = -Math.PI / 2;
-                    } else if (true == level.keys[Keyboard.RIGHT]) {
-                        direction = 0;
-                    } else if (true == level.keys[Keyboard.DOWN]) {
-                        direction = Math.PI / 2;
-                    }
-                    if (direction != -1) {
-                        force = Point.polar(SPEED_WALK, direction);
+                    if (false == level.keys[Keyboard.NUMPAD_7] && false == level.keys[Keyboard.O]) {
+                        var direction : Float = -1;
+                        if (true == level.keys[Keyboard.LEFT] && true == level.keys[Keyboard.UP]) {
+                            direction = 5 * Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.UP] && true == level.keys[Keyboard.RIGHT]) {
+                            direction = -Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.RIGHT] && true == level.keys[Keyboard.DOWN]) {
+                            direction = Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.DOWN] && true == level.keys[Keyboard.LEFT]) {
+                            direction = 3 * Math.PI / 4;
+                        } else if (true == level.keys[Keyboard.LEFT]) {
+                            direction = Math.PI;
+                        } else if (true == level.keys[Keyboard.UP]) {
+                            direction = -Math.PI / 2;
+                        } else if (true == level.keys[Keyboard.RIGHT]) {
+                            direction = 0;
+                        } else if (true == level.keys[Keyboard.DOWN]) {
+                            direction = Math.PI / 2;
+                        }
+                        if (direction != -1) {
+                            force = Point.polar(SPEED_WALK, direction);
+                            charging = 0;
+                        }
                     }
                 }
             }
+        }
+        if (stunned != 0) {
+            --stunned;
+            charging = 0;
         }
     }
     
@@ -194,19 +215,32 @@ class Player extends Sprite implements Entity
     
     private function disk() : Void
     {
-        if (holding == 0) {
-            if (level.disk.tossing == 0) {
+        if (holding == 0 && stunned == 0) {
+            if (num == 1 && true == level.keys[Keyboard.T]) {
+                ++charging;
+            } else if (num == 2 && (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O])) {
+                ++charging;
+            }
+            if (level.disk.tossing < 10 && level.disk.tossing >= 0) {
                 var rect : Rectangle = new Rectangle(x - size.x / 2, y - size.y / 2, size.x, size.y);
                 if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
-                    hold();
-                    holding = 6;
-                    Library.getInstance().soundCatch.play();
+                    if (level.disk.speed >= STRENGTH && charging < 30) {
+                        stun();
+                    } else {
+                        if (level.disk.tossing == 0 && level.disk.speed < STRENGTH) {
+                            charging = 0;
+                        }
+                        hold();
+                        holding = 6;
+                        level.disk.tossing = 0;
+                        Library.getInstance().soundCatch.play();
+                    }
                 }
             }
-        } else if (dashing == 0 && level.breakTime == 0) {
-            if (holding == 6) {
+        } else if (dashing == 0 && level.breakTime == 0 && stunned == 0) {
+            if (holding >= 6) {
                 if (num == 1) {
-                    if (true == level.keys[Keyboard.T] || true == level.keys[Keyboard.Y]) {
+                    if (holding >= 120 || true == level.keys[Keyboard.T] || true == level.keys[Keyboard.Y]) {
                         var direction : Float = 0;
                         if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
                             if (true == level.keys[Keyboard.D]) {
@@ -225,16 +259,20 @@ class Player extends Sprite implements Entity
                                 direction = Math.PI / 4;
                             }
                         }
-                        --holding;
-                        if (true == level.keys[Keyboard.T]) {
-                            level.disk.normalThrow(direction);
-                        } else {
+                        holding = 5;
+                        if (true == level.keys[Keyboard.Y]) {
                             level.disk.toss(direction);
+                        } else if (charging >= 30) {
+                            level.disk.powerThrow(direction);
+                        } else {
+                            level.disk.normalThrow(direction);
                         }
                         Library.getInstance().soundThrow.play();
+                    } else {
+                        ++holding;
                     }
                 } else {
-                    if (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O] || true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
+                    if (holding >= 120 || true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O] || true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
                         var direction : Float = Math.PI;
                         if (true == level.keys[Keyboard.UP]) {
                             if (true == level.keys[Keyboard.RIGHT]) {
@@ -253,19 +291,34 @@ class Player extends Sprite implements Entity
                                 direction = 5 * Math.PI / 4;
                             }
                         }
-                        --holding;
-                        if (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O]) {
-                            level.disk.normalThrow(direction);
-                        } else {
+                        holding = 5;
+                        if (true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
                             level.disk.toss(direction);
+                        } else if (charging >= 30) {
+                            level.disk.powerThrow(direction);
+                        } else {
+                            level.disk.normalThrow(direction);
                         }
                         Library.getInstance().soundThrow.play();
+                    } else {
+                        ++holding;
                     }
                 }
             } else {
                 --holding;
             }
         }
+    }
+    
+    private function stun() : Void
+    {
+        if (num == 1) {
+            level.disk.toss(0);
+        } else {
+            level.disk.toss(Math.PI);
+        }
+        stunned = 70;
+        Library.getInstance().soundStun.play();
     }
     
     private function hold() : Void
@@ -278,6 +331,15 @@ class Player extends Sprite implements Entity
         } else {
             level.disk.x = x - 11;
         }
+    }
+    
+    public function stop() : Void
+    {
+        force.x = 0;
+        force.y = 0;
+        holding = 0;
+        dashing = 0;
+        stunned = 0;
     }
     
     public function draw() : Void
@@ -302,6 +364,12 @@ class Player extends Sprite implements Entity
         } else if (anim >= 15) {
             vx = 16;
         }
+        if (stunned != 0) {
+            stunEffect.alpha = 1;
+            stunEffect.bitmapData.copyPixels(Library.getInstance().stun, new Rectangle(0, (anim % 20 >= 10 ? 16 : 0), 16, 16), new Point(0, 0));
+        } else {
+            stunEffect.alpha = 0;
+        }
         if (num == 2) {
             vx += 32;
         }
@@ -314,5 +382,6 @@ class Player extends Sprite implements Entity
     {
         level.shadows.removeChild(shadow);
         removeChild(sprite);
+        removeChild(stunEffect);
     }
 }
