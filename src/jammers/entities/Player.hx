@@ -123,7 +123,7 @@ class Player extends Sprite implements Entity
     
     private function movement() : Void
     {
-        if (dashing == 0) {
+        if (dashing == 0 && level.breakTime == 0) {
             force.x = 0;
             force.y = 0;
             if (holding == 0) {
@@ -203,7 +203,7 @@ class Player extends Sprite implements Entity
                     Library.getInstance().soundCatch.play();
                 }
             }
-        } else if (dashing == 0) {
+        } else if (dashing == 0 && level.breakTime == 0) {
             if (holding == 6) {
                 if (num == 1) {
                     if (true == level.keys[Keyboard.T] || true == level.keys[Keyboard.Y]) {

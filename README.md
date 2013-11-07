@@ -1,4 +1,4 @@
-# SchoolJammers
+# School Jammers
 
 Entry for [One Game A Month](http://www.onegameamonth.com "One Game A Month") June 2013.
 Yeah, in November.
@@ -20,12 +20,16 @@ And I though that it would be fun (for me at least) to "copy" the concept only o
 So, this is it.
 Windjammers in a school.
 
-## Why in a school ?
+## Why School ?
 
 Because I wanted to take a theme from One Game A Month and I couldn't find a theme for this idea.
 So, I chose the low-brow comprehension of this theme : educational.
 
-## Going technical
+## The "If I Had More Time" Ideas
+
+Incoming.
+
+## Going Technical
 
 * haxe
 * openfl

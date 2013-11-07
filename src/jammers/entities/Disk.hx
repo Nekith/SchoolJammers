@@ -12,7 +12,7 @@ import jammers.scenes.Level;
 class Disk extends Sprite implements Entity
 {
     public inline static var SPEED_NORMAL = 1.5;
-    public inline static var SPEED_TOSS = 1.4;
+    public inline static var SPEED_TOSS = 1.5;
     public inline static var SPEED_INCREASE = 0.17;
     
     public var zone : Rectangle;
@@ -53,11 +53,9 @@ class Disk extends Sprite implements Entity
         x += force.x;
         y += force.y;
         if (x - size.x / 2 < zone.x) {
-            x = zone.x + size.x / 2;
-            force.x = -force.x;
+            level.goal(2);
         } else if (x + size.x / 2 > zone.x + zone.width) {
-            x = zone.x + zone.width - size.x / 2;
-            force.x = -force.x;
+            level.goal(1);
         }
         if (y - size.y / 2 < zone.y) {
             y = zone.y + size.y / 2;

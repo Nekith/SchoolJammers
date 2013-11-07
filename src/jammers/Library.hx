@@ -4,7 +4,7 @@ import flash.text.Font;
 import flash.display.BitmapData;
 import flash.media.Sound;
 
-@:font("assets/slkscr.ttf") class PixelFont extends Font { }
+@:font("assets/visitor1.ttf") class PixelFont extends Font { }
 @:bitmap("assets/gfx/players.png") class BitmapPlayers extends BitmapData { }
 @:bitmap("assets/gfx/shadow.png") class BitmapShadow extends BitmapData { }
 @:bitmap("assets/gfx/playground/background.png") class BitmapPlaygroundBackground extends BitmapData { }
