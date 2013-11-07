@@ -4,6 +4,8 @@ import flash.geom.Point;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
+import flash.display.Shape;
+import flash.display.Graphics;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
@@ -26,6 +28,10 @@ class Level extends Scene
     private var foreground : Bitmap;
     private var scoreOne : TextField;
     private var scoreTwo : TextField;
+    private var roundsOne : Int;
+    private var roundsTwo : Int;
+    private var rounds : Shape;
+    private var ended : Int;
     private var channel : SoundChannel;
     
     private function new(diskBitmap : BitmapData)
@@ -34,6 +40,7 @@ class Level extends Scene
         dimension = new Point(180, 144);
         shadows = new Sprite();
         breakTime = 0;
+        ended = -1;
         // disk
         disk = new Disk(this, diskBitmap);
         disk.x = 120;
@@ -63,6 +70,7 @@ class Level extends Scene
         scoreOne.x = 43;
         scoreOne.y = 6;
         scoreOne.width = 30;
+        // scoreTwo
         var tfTwo : TextFormat = new TextFormat(Library.getInstance().font.fontName, 11, 0x183840);
         tfTwo.align = TextFormatAlign.LEFT;
         scoreTwo = new TextField();
@@ -73,6 +81,10 @@ class Level extends Scene
         scoreTwo.x = 90;
         scoreTwo.y = 6;
         scoreTwo.width = 30;
+        // rounds
+        roundsOne = 0;
+        roundsTwo = 0;
+        rounds = new Shape();
         // add children
         addChild(background);
         addChild(shadows);
@@ -82,6 +94,7 @@ class Level extends Scene
         addChild(foreground);
         addChild(scoreOne);
         addChild(scoreTwo);
+        addChild(rounds);
         // music
         music();
     }
@@ -91,7 +104,7 @@ class Level extends Scene
         if (channel != null) {
             channel.stop();
         }
-        channel = Library.getInstance().musicOpening.play();
+        channel = Library.getInstance().musicGame.play();
         channel.soundTransform.volume = 1;
         channel.addEventListener(Event.SOUND_COMPLETE, music);
     }
@@ -99,31 +112,38 @@ class Level extends Scene
     public override function update() : Scene
     {
         super.update();
-        if (true == focus) {
-            if (breakTime > 0) {
-                --breakTime;
+        if (focus == true) {
+            if (ended == -1) {
+                if (breakTime > 0) {
+                    --breakTime;
+                }
+                disk.update();
+                playerOne.update();
+                playerTwo.update();
+            } else {
+                --ended;
+                if (ended == 0) {
+                    return new MainMenu();
+                }
             }
-            disk.update();
-            playerOne.update();
-            playerTwo.update();
         }
         return this;
     }
     
-    public function goal(num : Int) : Void
+    public function goal(num : Int, add : Int) : Void
     {
         if (num == 1) {
-            var score : Int = Std.parseInt(scoreOne.text) + 3;
+            var score : Int = Std.parseInt(scoreOne.text) + add;
             scoreOne.text = Std.string(score);
-            if (score == 9) {
+            if (score >= 9) {
                 round(1);
             } else {
                 serve(2);
             }
         } else {
-            var score : Int = Std.parseInt(scoreTwo.text) + 3;
+            var score : Int = Std.parseInt(scoreTwo.text) + add;
             scoreTwo.text = Std.string(score);
-            if (score == 9) {
+            if (score >= 9) {
                 round(2);
             } else {
                 serve(1);
@@ -133,7 +153,7 @@ class Level extends Scene
     
     private function serve(num : Int) : Void
     {
-        breakTime = 120;
+        breakTime = 90;
         playerOne.x = 10;
         playerOne.y = 73;
         playerTwo.x = 150;
@@ -151,6 +171,37 @@ class Level extends Scene
     
     private function round(num : Int) : Void
     {
+        scoreOne.text = "0";
+        scoreTwo.text = "0";
+        if (num == 1) {
+            ++roundsOne;
+            var g : Graphics = rounds.graphics;
+            for (i in 0...roundsOne) {
+                g.beginFill(0x183840);
+                g.drawRect(70 - i * 3, 2, 2, 2);
+            }
+            if (roundsOne == 2) {
+                disk.force.x = 0;
+                disk.force.y = 0;
+                ended = 120;
+            } else {
+                serve(2);
+            }
+        } else {
+            ++roundsTwo;
+            var g : Graphics = rounds.graphics;
+            for (i in 0...roundsTwo) {
+                g.beginFill(0x183840);
+                g.drawRect(90 + i * 3, 2, 2, 2);
+            }
+            if (roundsTwo == 2) {
+                disk.force.x = 0;
+                disk.force.y = 0;
+                ended = 120;
+            } else {
+                serve(1);
+            }
+        }
     }
     
     public override function draw() : Void

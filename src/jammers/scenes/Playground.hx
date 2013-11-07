@@ -11,8 +11,8 @@ class Playground extends Level
         super(Library.getInstance().playgroundDisk);
         background.bitmapData = Library.getInstance().playgroundBackground;
         foreground.bitmapData = Library.getInstance().playgroundForeground;
-        disk.zone = new Rectangle(0, 18, 160, 112);
-        playerOne.zone = new Rectangle(0, 18, 81, 112);
-        playerTwo.zone = new Rectangle(80, 18, 81, 112);
+        disk.zone = new Rectangle(-5, 18, 170, 112);
+        playerOne.zone = new Rectangle(0, 18, 80, 112);
+        playerTwo.zone = new Rectangle(81, 18, 80, 112);
     }
 }

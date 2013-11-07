@@ -3,7 +3,7 @@ package jammers;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
-import jammers.scenes.Playground;
+import jammers.scenes.MainMenu;
 import jammers.UserInterface;
 
 class Main extends Sprite 
@@ -23,9 +23,9 @@ class Main extends Sprite
 	{
 		if (inited == false) {
             inited = true;
-            var playground : Playground = new Playground();
-            Lib.current.addChild(playground);
-            playground.init();
+            var menu : MainMenu = new MainMenu();
+            Lib.current.addChild(menu);
+            menu.init();
             //Lib.current.addChild(new UserInterface());
             // Stage:
             // stage.stageWidth x stage.stageHeight @ stage.dpiScale

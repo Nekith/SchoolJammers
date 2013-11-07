@@ -53,9 +53,9 @@ class Disk extends Sprite implements Entity
         x += force.x;
         y += force.y;
         if (x - size.x / 2 < zone.x) {
-            level.goal(2);
+            level.goal(2, 3);
         } else if (x + size.x / 2 > zone.x + zone.width) {
-            level.goal(1);
+            level.goal(1, 3);
         }
         if (y - size.y / 2 < zone.y) {
             y = zone.y + size.y / 2;
@@ -68,7 +68,12 @@ class Disk extends Sprite implements Entity
         }
         if (tossing != 0) {
             --tossing;
-            if (tossing == 0) {
+            if (tossing == 0 && (force.x != 0 || force.y != 0)) {
+                if (level.playerOne.zone.contains(x, y) == true) {
+                    level.goal(2, 2);
+                } else {
+                    level.goal(1, 2);
+                }
             }
         }
     }

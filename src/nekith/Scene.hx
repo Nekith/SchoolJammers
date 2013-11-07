@@ -82,6 +82,7 @@ class Scene extends Sprite
             if (scene != this) {
                 this.clean();
                 Lib.current.addChildAt(scene, 0);
+                scene.init();
                 return;
             }
             accumulator -= 1 / 60.0;
