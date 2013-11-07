@@ -151,22 +151,22 @@ class Player extends Sprite implements Entity
                     }
                 } else {
                     var direction : Float = -1;
-                    if (true == level.keys[Keyboard.LEFT]) {
-                        direction = Math.PI;
-                    } else if (true == level.keys[Keyboard.LEFT] && true == level.keys[Keyboard.UP]) {
+                    if (true == level.keys[Keyboard.LEFT] && true == level.keys[Keyboard.UP]) {
                         direction = 5 * Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.UP]) {
-                        direction = -Math.PI / 2;
                     } else if (true == level.keys[Keyboard.UP] && true == level.keys[Keyboard.RIGHT]) {
                         direction = -Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.RIGHT]) {
-                        direction = 0;
                     } else if (true == level.keys[Keyboard.RIGHT] && true == level.keys[Keyboard.DOWN]) {
                         direction = Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.DOWN]) {
-                        direction = Math.PI / 2;
                     } else if (true == level.keys[Keyboard.DOWN] && true == level.keys[Keyboard.LEFT]) {
                         direction = 3 * Math.PI / 4;
+                    } else if (true == level.keys[Keyboard.LEFT]) {
+                        direction = Math.PI;
+                    } else if (true == level.keys[Keyboard.UP]) {
+                        direction = -Math.PI / 2;
+                    } else if (true == level.keys[Keyboard.RIGHT]) {
+                        direction = 0;
+                    } else if (true == level.keys[Keyboard.DOWN]) {
+                        direction = Math.PI / 2;
                     }
                     if (direction != -1) {
                         force = Point.polar(SPEED_WALK, direction);
@@ -195,16 +195,18 @@ class Player extends Sprite implements Entity
     private function disk() : Void
     {
         if (holding == 0) {
-            var rect : Rectangle = new Rectangle(x - size.x / 2, y - size.y / 2, size.x, size.y);
-            if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
-                hold();
-                holding = 6;
-                Library.getInstance().soundCatch.play();
+            if (level.disk.tossing == 0) {
+                var rect : Rectangle = new Rectangle(x - size.x / 2, y - size.y / 2, size.x, size.y);
+                if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
+                    hold();
+                    holding = 6;
+                    Library.getInstance().soundCatch.play();
+                }
             }
         } else if (dashing == 0) {
             if (holding == 6) {
                 if (num == 1) {
-                    if (true == level.keys[Keyboard.T]) {
+                    if (true == level.keys[Keyboard.T] || true == level.keys[Keyboard.Y]) {
                         var direction : Float = 0;
                         if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
                             if (true == level.keys[Keyboard.D]) {
@@ -224,12 +226,15 @@ class Player extends Sprite implements Entity
                             }
                         }
                         --holding;
-                        level.disk.speed += Disk.SPEED_INCREASE;
-                        level.disk.force = Point.polar(level.disk.speed, direction);
+                        if (true == level.keys[Keyboard.T]) {
+                            level.disk.normalThrow(direction);
+                        } else {
+                            level.disk.toss(direction);
+                        }
                         Library.getInstance().soundThrow.play();
                     }
                 } else {
-                    if (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O]) {
+                    if (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O] || true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
                         var direction : Float = Math.PI;
                         if (true == level.keys[Keyboard.UP]) {
                             if (true == level.keys[Keyboard.RIGHT]) {
@@ -249,8 +254,11 @@ class Player extends Sprite implements Entity
                             }
                         }
                         --holding;
-                        level.disk.speed += Disk.SPEED_INCREASE;
-                        level.disk.force = Point.polar(level.disk.speed, direction);
+                        if (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O]) {
+                            level.disk.normalThrow(direction);
+                        } else {
+                            level.disk.toss(direction);
+                        }
                         Library.getInstance().soundThrow.play();
                     }
                 }
@@ -293,6 +301,9 @@ class Player extends Sprite implements Entity
             anim = 0;
         } else if (anim >= 15) {
             vx = 16;
+        }
+        if (num == 2) {
+            vx += 32;
         }
         sprite.bitmapData.copyPixels(Library.getInstance().players, new Rectangle(vx, vy, 16, 24), new Point(0, 0));
         shadow.x = x - 12;

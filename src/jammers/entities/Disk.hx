@@ -12,12 +12,14 @@ import jammers.scenes.Level;
 class Disk extends Sprite implements Entity
 {
     public inline static var SPEED_NORMAL = 1.5;
+    public inline static var SPEED_TOSS = 1.4;
     public inline static var SPEED_INCREASE = 0.17;
     
     public var zone : Rectangle;
+    public var size(default, null) : Point;
     public var speed : Float;
     public var force : Point;
-    public var size(default, null) : Point;
+    public var tossing(default, null) : Int;
     private var level : Level;
     private var sheet : BitmapData;
     private var shadow : Bitmap;
@@ -28,9 +30,10 @@ class Disk extends Sprite implements Entity
     {
         super();
         zone = new Rectangle();
+        size = new Point(16, 10);
         speed = SPEED_NORMAL;
         force = Point.polar(speed, Math.PI / 4);
-        size = new Point(16, 10);
+        tossing = 0;
         level = scene;
         sheet = diskBitmap;
         shadow = new Bitmap(new BitmapData(16, 10, true));
@@ -65,6 +68,24 @@ class Disk extends Sprite implements Entity
             force.y = -force.y;
             Library.getInstance().soundBounce.play();
         }
+        if (tossing != 0) {
+            --tossing;
+            if (tossing == 0) {
+            }
+        }
+    }
+    
+    public function toss(direction : Float) : Void
+    {
+        level.disk.speed = Disk.SPEED_TOSS;
+        level.disk.tossing = 60;
+        force = Point.polar(speed, direction);
+    }
+    
+    public function normalThrow(direction : Float) : Void
+    {
+        speed += Disk.SPEED_INCREASE;
+        force = Point.polar(speed, direction);
     }
     
     public function draw() : Void
@@ -79,6 +100,17 @@ class Disk extends Sprite implements Entity
                 vy = 10;
             }
             sprite.bitmapData.copyPixels(sheet, new Rectangle(0, vy, 16, 10), new Point(0, 0));
+        }
+        if (tossing != 0) {
+            if (tossing > 40) {
+                sprite.y = -11 + tossing % 21 - 20;
+            } else if (tossing > 20) {
+                sprite.y = -31;
+            } else {
+                sprite.y = -11 - tossing;
+            }
+        } else {
+            sprite.y = -11;
         }
         shadow.x = x - 8;
         shadow.y = y - 5;

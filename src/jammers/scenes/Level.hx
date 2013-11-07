@@ -14,6 +14,7 @@ class Level extends Scene
     public var shadows : Sprite;
     public var disk(default, null) : Disk;
     public var playerOne(default, null) : Player;
+    public var playerTwo(default, null) : Player;
     private var background : Bitmap;
     private var foreground : Bitmap;
     
@@ -26,8 +27,11 @@ class Level extends Scene
         disk.x = 120;
         disk.y = 60;
         playerOne = new Player(this, 1);
-        playerOne.x = 32;
-        playerOne.y = 32;
+        playerOne.x = 10;
+        playerOne.y = 73;
+        playerTwo = new Player(this, 2);
+        playerTwo.x = 150;
+        playerTwo.y = 73;
         background = new Bitmap();
         background.x = -10;
         foreground = new Bitmap();
@@ -36,6 +40,7 @@ class Level extends Scene
         addChild(shadows);
         addChild(disk);
         addChild(playerOne);
+        addChild(playerTwo);
         addChild(foreground);
     }
     
@@ -45,6 +50,7 @@ class Level extends Scene
         if (true == focus) {
             disk.update();
             playerOne.update();
+            playerTwo.update();
         }
         return this;
     }
@@ -55,6 +61,7 @@ class Level extends Scene
         if (true == focus) {
             disk.draw();
             playerOne.draw();
+            playerTwo.draw();
         }
     }
     
@@ -63,6 +70,7 @@ class Level extends Scene
         super.clean();
         disk.clean();
         playerOne.clean();
+        playerTwo.clean();
         removeChild(background);
         removeChild(playerOne);
         removeChild(disk);
