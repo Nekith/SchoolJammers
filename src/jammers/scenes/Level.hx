@@ -147,7 +147,7 @@ class Level extends Scene
         if (num == 1) {
             var score : Int = Std.parseInt(scoreOne.text) + add;
             scoreOne.text = Std.string(score);
-            if (score >= 9) {
+            if (score >= 11) {
                 round(1);
             } else {
                 serve(2);
@@ -155,7 +155,7 @@ class Level extends Scene
         } else {
             var score : Int = Std.parseInt(scoreTwo.text) + add;
             scoreTwo.text = Std.string(score);
-            if (score >= 9) {
+            if (score >= 11) {
                 round(2);
             } else {
                 serve(1);

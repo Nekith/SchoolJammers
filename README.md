@@ -31,7 +31,7 @@ You hit the goal (it's the far-left and far-right zones), you mark 3 points.
 
 You toss the disk and your adversary don't catch it, you mark 2 points.
 
-At 9 points, you win a round.
+At 11 points, you win a round.
 
 A 2 rounds, you win the game.
 
