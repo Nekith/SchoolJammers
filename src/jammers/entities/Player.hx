@@ -2,10 +2,13 @@ package jammers.entities;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.geom.Matrix;
+import flash.geom.ColorTransform;
 import flash.display.Sprite;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.BitmapDataChannel;
+import flash.display.BlendMode;
 import flash.ui.Keyboard;
 import nekith.Entity;
 import jammers.Library;
@@ -14,14 +17,14 @@ import jammers.entities.Disk;
 
 class Player extends Sprite implements Entity
 {
-    public inline static var SPEED_WALK = 1.2;
-    public inline static var SPEED_DASH = 2.3;
-    public inline static var STRENGTH = 3.5;
-    
     public var zone : Rectangle;
     public var force : Point;
+    public var speedWalk(default, null) : Float;
+    public var speedDash(default, null) : Float;
+    public var strength(default, null) : Float;
     private var level : Level;
     private var num : Int;
+    private var char : Int;
     private var size : Point;
     private var holding : Int;
     private var dashing : Int;
@@ -32,13 +35,27 @@ class Player extends Sprite implements Entity
     private var stunEffect : Bitmap;
     private var anim : Int;
     
-    public function new(scene : Level, number : Int)
+    public function new(scene : Level, number : Int, character : Int)
     {
         super();
         zone = new Rectangle(0, 0, 0, 0);
         force = new Point();
+        if (char == 3) {
+            speedWalk = 1.1;
+            speedDash = 2.1;
+            strength = 3.9;
+        } else if (char == 2) {
+            speedWalk = 1.3;
+            speedDash = 2.5;
+            strength = 3.1;
+        } else {
+            speedWalk = 1.2;
+            speedDash = 2.3;
+            strength = 3.5;
+        }
         level = scene;
         num = number;
+        char = character;
         size = new Point(14, 20);
         holding = 0;
         dashing = 0;
@@ -97,7 +114,7 @@ class Player extends Sprite implements Entity
                         direction = Math.PI / 2;
                     }
                     if (direction != -1) {
-                        force = Point.polar(SPEED_DASH, direction);
+                        force = Point.polar(speedDash, direction);
                         dashing = 20;
                         Library.getInstance().soundDash.play();
                     }
@@ -123,7 +140,7 @@ class Player extends Sprite implements Entity
                         direction = Math.PI / 2;
                     }
                     if (direction != -1) {
-                        force = Point.polar(SPEED_DASH, direction);
+                        force = Point.polar(speedDash, direction);
                         dashing = 20;
                         Library.getInstance().soundDash.play();
                     }
@@ -159,7 +176,7 @@ class Player extends Sprite implements Entity
                             direction = Math.PI / 2;
                         }
                         if (direction != -1) {
-                            force = Point.polar(SPEED_WALK, direction);
+                            force = Point.polar(speedWalk, direction);
                             charging = 0;
                         }
                     }
@@ -184,7 +201,7 @@ class Player extends Sprite implements Entity
                             direction = Math.PI / 2;
                         }
                         if (direction != -1) {
-                            force = Point.polar(SPEED_WALK, direction);
+                            force = Point.polar(speedWalk, direction);
                             charging = 0;
                         }
                     }
@@ -224,10 +241,10 @@ class Player extends Sprite implements Entity
             if (level.disk.tossing < 10 && level.disk.tossing >= 0) {
                 var rect : Rectangle = new Rectangle(x - size.x / 2, y - size.y / 2, size.x, size.y);
                 if (rect.intersects(new Rectangle(level.disk.x - level.disk.size.x / 2, level.disk.y - level.disk.size.y / 2, level.disk.size.x, level.disk.size.y)) == true) {
-                    if (level.disk.speed >= STRENGTH && charging < 30) {
+                    if (level.disk.speed >= strength && charging < 30) {
                         stun();
                     } else {
-                        if (level.disk.tossing == 0 && level.disk.speed < STRENGTH) {
+                        if (level.disk.tossing == 0 && level.disk.speed < strength) {
                             charging = 0;
                         }
                         hold();
@@ -263,10 +280,11 @@ class Player extends Sprite implements Entity
                         if (true == level.keys[Keyboard.Y]) {
                             level.disk.toss(direction);
                         } else if (charging >= 30) {
-                            level.disk.powerThrow(direction);
+                            level.disk.powerThrow(direction, strength);
                         } else {
                             level.disk.normalThrow(direction);
                         }
+                        charging = 0;
                         Library.getInstance().soundThrow.play();
                     } else {
                         ++holding;
@@ -295,10 +313,11 @@ class Player extends Sprite implements Entity
                         if (true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
                             level.disk.toss(direction);
                         } else if (charging >= 30) {
-                            level.disk.powerThrow(direction);
+                            level.disk.powerThrow(direction, strength);
                         } else {
                             level.disk.normalThrow(direction);
                         }
+                        charging = 0;
                         Library.getInstance().soundThrow.play();
                     } else {
                         ++holding;
@@ -370,10 +389,22 @@ class Player extends Sprite implements Entity
         } else {
             stunEffect.alpha = 0;
         }
-        if (num == 2) {
+        if (char == 2) {
             vx += 32;
+        } else if (char == 3) {
+            vx += 64;
         }
-        sprite.bitmapData.copyPixels(Library.getInstance().players, new Rectangle(vx, vy, 16, 24), new Point(0, 0));
+        if (num == 2) {
+            var temp : BitmapData = new BitmapData(16, 24, true, 0);
+            temp.copyPixels(Library.getInstance().players, new Rectangle(vx, vy, 16, 24), new Point(0, 0));
+            var matrix : Matrix = new Matrix();
+            matrix.scale( -1, 1);
+            matrix.translate(16, 0);
+            sprite.bitmapData = new BitmapData(16, 24, true, 0);
+            sprite.bitmapData.draw(temp, matrix);
+        } else {
+            sprite.bitmapData.copyPixels(Library.getInstance().players, new Rectangle(vx, vy, 16, 24), new Point(0, 0));
+        }
         shadow.x = x - 12;
         shadow.y = y - 8;
     }

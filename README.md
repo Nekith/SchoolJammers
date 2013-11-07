@@ -3,32 +3,45 @@
 Entry for [One Game A Month](http://www.onegameamonth.com "One Game A Month") June 2013.
 Yeah, in November.
 
-And I just decided that it will also be a [Game Boy Jam 2](http://gbjam.net "Game Boy Jam") entry.
-
-I'm going for three days working on it.
+And I've decided that it will also be a [Game Boy Jam 2](http://gbjam.net "Game Boy Jam") entry.
 
 ## How To Play
 
 You need two players on the same computer.
 And a keyboard handling several key strokes simultaneously.
+Just try. At least, if you lose, you can blame the keyboard.
 
 ### Controls
 
 Player 1 :
 
 * W/Z Q/A S D : movement / throw direction
-* T : throw / charging
+* T : throw / charging / ok
 * Y : toss / dash
+
+Player 2 :
+
+* Up Left Down Right : movement / throw direction
+* O/Numpad 7 : throw / charging / ok
+* P/Numpad 8 : toss / dash
 
 ### Rules
 
-Incoming.
+You hit the goal (it's the far-left and far-right zones), you mark 3 points.
 
-* Normal throw
-* Dash
-* Toss
-* Power throw
-* Counter power throw
+You toss the disk and your adversary don't catch it, you mark 2 points.
+
+At 9 points, you win a round.
+
+A 2 rounds, you win the game.
+
+### Moves
+
+If the disk speed is too high, you can be stunned.
+
+If you charge your throw before receiving a toss, you execute a power throw.
+
+If you charge your throw before receiving a power throw, you counter it.
 
 ## What ?
 
@@ -44,7 +57,7 @@ Windjammers in a school.
 
 ## Why School ?
 
-Because I wanted to take a theme from One Game A Month and I couldn't find a theme for this idea.
+Because I wanted to take a theme from One Game A Month and I couldn't find a theme fitting for it.
 So, I chose the low-brow comprehension of this theme : educational.
 
 ## Going Technical

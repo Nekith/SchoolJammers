@@ -4,7 +4,6 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
 import jammers.scenes.MainMenu;
-import jammers.UserInterface;
 
 class Main extends Sprite 
 {
@@ -26,12 +25,6 @@ class Main extends Sprite
             var menu : MainMenu = new MainMenu();
             Lib.current.addChild(menu);
             menu.init();
-            //Lib.current.addChild(new UserInterface());
-            // Stage:
-            // stage.stageWidth x stage.stageHeight @ stage.dpiScale
-            
-            // Assets:
-            // nme.Assets.getBitmapData("img/assetname.jpg");
         }
 	}
 

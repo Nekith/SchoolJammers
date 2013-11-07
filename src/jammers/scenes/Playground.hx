@@ -6,9 +6,9 @@ import jammers.scenes.Level;
 
 class Playground extends Level
 {
-    public function new()
+    public function new(okOne : Int, okTwo : Int)
     {
-        super(Library.getInstance().playgroundDisk);
+        super(Library.getInstance().playgroundDisk, okOne, okTwo);
         background.bitmapData = Library.getInstance().playgroundBackground;
         foreground.bitmapData = Library.getInstance().playgroundForeground;
         disk.zone = new Rectangle(-5, 18, 170, 112);

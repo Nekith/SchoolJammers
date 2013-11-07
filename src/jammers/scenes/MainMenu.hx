@@ -18,6 +18,7 @@ class MainMenu extends Scene
     {
         super();
         background = new Bitmap(Library.getInstance().title);
+        background.x = -3;
         space = new Bitmap(Library.getInstance().titleSpace);
         addChild(background);
         addChild(space);
@@ -38,7 +39,7 @@ class MainMenu extends Scene
     public override function update() : Scene
     {
         if (true == keys[Keyboard.SPACE]) {
-            return new Playground();
+            return new Selection();
         }
         return this;
     }

@@ -12,7 +12,6 @@ import jammers.scenes.Level;
 class Disk extends Sprite implements Entity
 {
     public inline static var SPEED_NORMAL = 1.5;
-    public inline static var SPEED_POWER = 3.5;
     public inline static var SPEED_TOSS = 1.5;
     public inline static var SPEED_INCREASE = 0.17;
     
@@ -55,9 +54,9 @@ class Disk extends Sprite implements Entity
     {
         x += force.x;
         y += force.y;
-        if (x - size.x / 2 < zone.x) {
+        if (x - size.x / 2 < zone.x && tossing <= 0) {
             level.goal(2, 3);
-        } else if (x + size.x / 2 > zone.x + zone.width) {
+        } else if (x + size.x / 2 > zone.x + zone.width && tossing <= 0) {
             level.goal(1, 3);
         }
         if (y - size.y / 2 < zone.y) {
@@ -100,9 +99,9 @@ class Disk extends Sprite implements Entity
         force = Point.polar(speed, direction);
     }
     
-    public function powerThrow(direction : Float) : Void
+    public function powerThrow(direction : Float, strength : Float) : Void
     {
-        speed = SPEED_POWER;
+        speed = strength;
         force = Point.polar(speed, direction);
     }
     

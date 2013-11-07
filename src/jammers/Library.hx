@@ -7,6 +7,7 @@ import flash.media.Sound;
 @:font("assets/visitor1.ttf") class PixelFont extends Font { }
 @:bitmap("assets/gfx/title.png") class BitmapTitle extends BitmapData { }
 @:bitmap("assets/gfx/title_space.png") class BitmapTitleSpace extends BitmapData { }
+@:bitmap("assets/gfx/menu.png") class BitmapMenu extends BitmapData { }
 @:bitmap("assets/gfx/players.png") class BitmapPlayers extends BitmapData { }
 @:bitmap("assets/gfx/shadow.png") class BitmapShadow extends BitmapData { }
 @:bitmap("assets/gfx/stun.png") class BitmapStun extends BitmapData { }
@@ -29,6 +30,7 @@ class Library
     public var font(default, null) : Font;
     public var title(default, null) : BitmapData;
     public var titleSpace(default, null) : BitmapData;
+    public var menu(default, null) : BitmapData;
     public var players(default, null) : BitmapData;
     public var shadow(default, null) : BitmapData;
     public var stun(default, null) : BitmapData;
@@ -57,6 +59,7 @@ class Library
         font = new PixelFont();
         title = new BitmapTitle(0, 0);
         titleSpace = new BitmapTitleSpace(0, 0);
+        menu = new BitmapMenu(0, 0);
         players = new BitmapPlayers(0, 0);
         shadow = new BitmapShadow(0, 0);
         stun = new BitmapStun(0, 0);

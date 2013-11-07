@@ -13,7 +13,6 @@ import flash.media.SoundChannel;
 import flash.events.Event;
 import nekith.Scene;
 import jammers.Library;
-import jammers.UserInterface;
 import jammers.entities.Disk;
 import jammers.entities.Player;
 
@@ -35,7 +34,7 @@ class Level extends Scene
     private var ended : Int;
     private var channel : SoundChannel;
     
-    private function new(diskBitmap : BitmapData)
+    private function new(diskBitmap : BitmapData, okOne : Int, okTwo : Int)
     {
         super();
         dimension = new Point(180, 144);
@@ -48,11 +47,11 @@ class Level extends Scene
         disk.x = 120;
         disk.y = 60;
         // playerOne
-        playerOne = new Player(this, 1);
+        playerOne = new Player(this, 1, okOne);
         playerOne.x = 10;
         playerOne.y = 73;
         // playerTwo
-        playerTwo = new Player(this, 2);
+        playerTwo = new Player(this, 2, okTwo);
         playerTwo.x = 150;
         playerTwo.y = 73;
         // background
