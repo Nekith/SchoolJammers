@@ -40,11 +40,11 @@ class Player extends Sprite implements Entity
         super();
         zone = new Rectangle(0, 0, 0, 0);
         force = new Point();
-        if (char == 3) {
+        if (character == 3) {
             speedWalk = 1.1;
             speedDash = 2.1;
             strength = 3.9;
-        } else if (char == 2) {
+        } else if (character == 2) {
             speedWalk = 1.3;
             speedDash = 2.5;
             strength = 3.1;
@@ -79,13 +79,34 @@ class Player extends Sprite implements Entity
     
     public function update() : Void
     {
-        dash();
-        movement();
+        var wantUp : Bool;
+        var wantDown : Bool;
+        var wantLeft : Bool;
+        var wantRight : Bool;
+        var wantMain : Bool;
+        var wantSecond : Bool;
+        if (num == 1) {
+            wantUp = (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]);
+            wantDown = (true == level.keys[Keyboard.S]);
+            wantLeft = (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]);
+            wantRight = (true == level.keys[Keyboard.D]);
+            wantMain = (true == level.keys[Keyboard.T]);
+            wantSecond = (true == level.keys[Keyboard.Y]);
+        } else {
+            wantUp = (true == level.keys[Keyboard.UP]);
+            wantDown = (true == level.keys[Keyboard.DOWN]);
+            wantLeft = (true == level.keys[Keyboard.LEFT]);
+            wantRight = (true == level.keys[Keyboard.RIGHT]);
+            wantMain = (true == level.keys[Keyboard.O] || true == level.keys[Keyboard.NUMPAD_7]);
+            wantSecond = (true == level.keys[Keyboard.P] || true == level.keys[Keyboard.NUMPAD_8]);
+        }
+        dash(wantUp, wantDown, wantLeft, wantRight, wantSecond);
+        movement(wantUp, wantDown, wantLeft, wantRight, wantMain);
         collision();
-        disk();
+        disk(wantUp, wantDown, wantLeft, wantRight, wantMain, wantSecond);
     }
     
-    private function dash() : Void
+    private function dash(wantUp : Bool, wantDown : Bool, wantLeft : Bool, wantRight : Bool, wantDash : Bool) : Void
     {
         if (dashing != 0) {
             --dashing;
@@ -94,23 +115,23 @@ class Player extends Sprite implements Entity
             }
         } else if (holding == 0 && stunned == 0) {
             if (num == 1) {
-                if (true == level.keys[Keyboard.Y]) {
+                if (wantDash == true) {
                     var direction : Float = -1;
-                    if ((true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) && (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W])) {
+                    if (wantLeft == true && wantUp == true) {
                         direction = 5 * Math.PI / 4;
-                    } else if ((true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) && true == level.keys[Keyboard.D]) {
+                    } else if (wantUp == true && wantRight == true) {
                         direction = -Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.D] && true == level.keys[Keyboard.S]) {
+                    } else if (wantRight == true && wantDown == true) {
                         direction = Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.S] && (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A])) {
+                    } else if (wantDown == true && wantLeft == true) {
                         direction = 3 * Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                    } else if (wantLeft == true ) {
                         direction = Math.PI;
-                    } else if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
+                    } else if (wantUp == true) {
                         direction = -Math.PI / 2;
-                    } else if (true == level.keys[Keyboard.D]) {
+                    } else if (wantRight == true) {
                         direction = 0;
-                    } else if (true == level.keys[Keyboard.S]) {
+                    } else if (wantDown == true) {
                         direction = Math.PI / 2;
                     }
                     if (direction != -1) {
@@ -120,23 +141,23 @@ class Player extends Sprite implements Entity
                     }
                 }
             } else {
-                if (true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
+                if (wantDash == true) {
                     var direction : Float = -1;
-                    if (true == level.keys[Keyboard.LEFT] && true == level.keys[Keyboard.UP]) {
+                    if (wantLeft == true && wantUp == true) {
                         direction = 5 * Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.UP] && true == level.keys[Keyboard.RIGHT]) {
+                    } else if (wantUp == true && wantRight == true) {
                         direction = -Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.RIGHT] && true == level.keys[Keyboard.DOWN]) {
+                    } else if (wantRight == true && wantDown == true) {
                         direction = Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.DOWN] && true == level.keys[Keyboard.LEFT]) {
+                    } else if (wantDown == true && wantLeft == true) {
                         direction = 3 * Math.PI / 4;
-                    } else if (true == level.keys[Keyboard.LEFT]) {
+                    } else if (wantLeft == true ) {
                         direction = Math.PI;
-                    } else if (true == level.keys[Keyboard.UP]) {
+                    } else if (wantUp == true) {
                         direction = -Math.PI / 2;
-                    } else if (true == level.keys[Keyboard.RIGHT]) {
+                    } else if (wantRight == true) {
                         direction = 0;
-                    } else if (true == level.keys[Keyboard.DOWN]) {
+                    } else if (wantDown == true) {
                         direction = Math.PI / 2;
                     }
                     if (direction != -1) {
@@ -149,30 +170,30 @@ class Player extends Sprite implements Entity
         }
     }
     
-    private function movement() : Void
+    private function movement(wantUp : Bool, wantDown : Bool, wantLeft : Bool, wantRight : Bool, wantThrow : Bool) : Void
     {
         if (dashing == 0 && level.breakTime == 0) {
             force.x = 0;
             force.y = 0;
             if (holding == 0 && stunned == 0) {
                 if (num == 1) {
-                    if (false == level.keys[Keyboard.T]) {
+                    if (wantThrow == false) {
                         var direction : Float = -1;
-                        if ((true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) && (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W])) {
+                        if (wantLeft == true && wantUp == true) {
                             direction = 5 * Math.PI / 4;
-                        } else if ((true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) && true == level.keys[Keyboard.D]) {
+                        } else if (wantUp == true && wantRight == true) {
                             direction = -Math.PI / 4;
-                        } else if (true == level.keys[Keyboard.D] && true == level.keys[Keyboard.S]) {
+                        } else if (wantRight == true && wantDown == true) {
                             direction = Math.PI / 4;
-                        } else if (true == level.keys[Keyboard.S] && (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A])) {
+                        } else if (wantDown == true && wantLeft == true) {
                             direction = 3 * Math.PI / 4;
-                        } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                        } else if (wantLeft == true) {
                             direction = Math.PI;
-                        } else if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
+                        } else if (wantUp == true) {
                             direction = -Math.PI / 2;
-                        } else if (true == level.keys[Keyboard.D]) {
+                        } else if (wantRight == true) {
                             direction = 0;
-                        } else if (true == level.keys[Keyboard.S]) {
+                        } else if (wantDown == true) {
                             direction = Math.PI / 2;
                         }
                         if (direction != -1) {
@@ -181,23 +202,23 @@ class Player extends Sprite implements Entity
                         }
                     }
                 } else {
-                    if (false == level.keys[Keyboard.NUMPAD_7] && false == level.keys[Keyboard.O]) {
+                    if (wantThrow == false) {
                         var direction : Float = -1;
-                        if (true == level.keys[Keyboard.LEFT] && true == level.keys[Keyboard.UP]) {
+                        if (wantLeft == true && wantUp == true) {
                             direction = 5 * Math.PI / 4;
-                        } else if (true == level.keys[Keyboard.UP] && true == level.keys[Keyboard.RIGHT]) {
+                        } else if (wantUp == true && wantRight == true) {
                             direction = -Math.PI / 4;
-                        } else if (true == level.keys[Keyboard.RIGHT] && true == level.keys[Keyboard.DOWN]) {
+                        } else if (wantRight == true && wantDown == true) {
                             direction = Math.PI / 4;
-                        } else if (true == level.keys[Keyboard.DOWN] && true == level.keys[Keyboard.LEFT]) {
+                        } else if (wantDown == true && wantLeft == true) {
                             direction = 3 * Math.PI / 4;
-                        } else if (true == level.keys[Keyboard.LEFT]) {
+                        } else if (wantLeft == true) {
                             direction = Math.PI;
-                        } else if (true == level.keys[Keyboard.UP]) {
+                        } else if (wantUp == true) {
                             direction = -Math.PI / 2;
-                        } else if (true == level.keys[Keyboard.RIGHT]) {
+                        } else if (wantRight == true) {
                             direction = 0;
-                        } else if (true == level.keys[Keyboard.DOWN]) {
+                        } else if (wantDown == true) {
                             direction = Math.PI / 2;
                         }
                         if (direction != -1) {
@@ -230,12 +251,10 @@ class Player extends Sprite implements Entity
         }
     }
     
-    private function disk() : Void
+    private function disk(wantUp : Bool, wantDown : Bool, wantLeft : Bool, wantRight : Bool, wantThrow : Bool, wantToss : Bool) : Void
     {
         if (holding == 0 && stunned == 0) {
-            if (num == 1 && true == level.keys[Keyboard.T]) {
-                ++charging;
-            } else if (num == 2 && (true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O])) {
+            if (true == wantThrow) {
                 ++charging;
             }
             if (level.disk.tossing < 10 && level.disk.tossing >= 0) {
@@ -257,27 +276,27 @@ class Player extends Sprite implements Entity
         } else if (dashing == 0 && level.breakTime == 0 && stunned == 0) {
             if (holding >= 6) {
                 if (num == 1) {
-                    if (holding >= 120 || true == level.keys[Keyboard.T] || true == level.keys[Keyboard.Y]) {
+                    if (holding >= 120 || wantThrow == true || wantToss == true) {
                         var direction : Float = 0;
-                        if (true == level.keys[Keyboard.Z] || true == level.keys[Keyboard.W]) {
-                            if (true == level.keys[Keyboard.D]) {
+                        if (wantUp == true) {
+                            if (wantRight == true) {
                                 direction = -Math.PI / 6;
-                            } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                            } else if (wantLeft == true) {
                                 direction = -Math.PI / 3;
                             } else {
                                 direction = -Math.PI / 4;
                             }
-                        } else if (true == level.keys[Keyboard.S]) {
-                            if (true == level.keys[Keyboard.D]) {
+                        } else if (wantDown == true) {
+                            if (wantRight == true) {
                                 direction = Math.PI / 6;
-                            } else if (true == level.keys[Keyboard.Q] || true == level.keys[Keyboard.A]) {
+                            } else if (wantLeft == true) {
                                 direction = Math.PI / 3;
                             } else {
                                 direction = Math.PI / 4;
                             }
                         }
                         holding = 5;
-                        if (true == level.keys[Keyboard.Y]) {
+                        if (wantToss == true) {
                             level.disk.toss(direction);
                         } else if (charging >= 30) {
                             level.disk.powerThrow(direction, strength);
@@ -290,27 +309,27 @@ class Player extends Sprite implements Entity
                         ++holding;
                     }
                 } else {
-                    if (holding >= 120 || true == level.keys[Keyboard.NUMPAD_7] || true == level.keys[Keyboard.O] || true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
+                    if (holding >= 120 || wantThrow == true || wantToss == true) {
                         var direction : Float = Math.PI;
-                        if (true == level.keys[Keyboard.UP]) {
-                            if (true == level.keys[Keyboard.RIGHT]) {
+                        if (wantUp == true) {
+                            if (wantRight == true) {
                                 direction = -2 * Math.PI / 3;
-                            } else if (true == level.keys[Keyboard.LEFT]) {
+                            } else if (wantLeft == true) {
                                 direction = -5 * Math.PI / 6;
                             } else {
                                 direction = -3 * Math.PI / 4;
                             }
-                        } else if (true == level.keys[Keyboard.DOWN]) {
-                            if (true == level.keys[Keyboard.RIGHT]) {
+                        } else if (wantDown == true) {
+                            if (wantRight == true) {
                                 direction = 4 * Math.PI / 3;
-                            } else if (true == level.keys[Keyboard.LEFT]) {
+                            } else if (wantLeft == true) {
                                 direction = 7 * Math.PI / 6;
                             } else {
                                 direction = 5 * Math.PI / 4;
                             }
                         }
                         holding = 5;
-                        if (true == level.keys[Keyboard.NUMPAD_8] || true == level.keys[Keyboard.P]) {
+                        if (wantToss == true) {
                             level.disk.toss(direction);
                         } else if (charging >= 30) {
                             level.disk.powerThrow(direction, strength);

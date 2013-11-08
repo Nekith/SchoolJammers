@@ -111,6 +111,7 @@ class Disk extends Sprite implements Entity
         force.y = 0;
         innerForce = SPEED_NORMAL;
         speed = SPEED_NORMAL;
+        tossing = 0;
     }
     
     public function draw() : Void
@@ -128,7 +129,7 @@ class Disk extends Sprite implements Entity
         }
         if (tossing != 0) {
             if (tossing > 40) {
-                sprite.y = -11 + tossing % 21 - 20;
+                sprite.y = -11 + tossing - 59;
             } else if (tossing > 20) {
                 sprite.y = -31;
             } else {

@@ -8,9 +8,9 @@ Obviously.
 
 ## How To Play
 
-It's a lite Windjammers-like game.
+It's a Windjammers-like game.
 
-Two kids play with a frisbee in a volley-ball/handball mix.
+Kids play with a frisbee in a volley-ball/handball mix.
 Something like that.
 
 There's a simple CPU mode but it's a game meant to be played against another human.
@@ -29,13 +29,13 @@ A 2 rounds, you win the game.
 
 Player 1 :
 
-* W/Z Q/A S D : movement / throw direction
+* W/Z Q/A S D : movement / throw direction / menu cursors
 * T : throw / charging / ok
 * Y : toss / dash
 
 Player 2 :
 
-* Up Left Down Right : movement / throw direction
+* Up Left Down Right : movement / throw direction / menu cursors
 * O/Numpad 7 : throw / charging / ok
 * P/Numpad 8 : toss / dash
 

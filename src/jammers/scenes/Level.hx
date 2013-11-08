@@ -15,6 +15,7 @@ import nekith.Scene;
 import jammers.Library;
 import jammers.entities.Disk;
 import jammers.entities.Player;
+import jammers.entities.Cpu;
 
 class Level extends Scene
 {
@@ -34,7 +35,7 @@ class Level extends Scene
     private var ended : Int;
     private var channel : SoundChannel;
     
-    private function new(diskBitmap : BitmapData, okOne : Int, okTwo : Int)
+    private function new(diskBitmap : BitmapData, charOne : Int, charTwo : Int, modeOne : Int, modeTwo : Int)
     {
         super();
         dimension = new Point(180, 144);
@@ -47,11 +48,19 @@ class Level extends Scene
         disk.x = 120;
         disk.y = 60;
         // playerOne
-        playerOne = new Player(this, 1, okOne);
+        if (modeOne == 1) {
+            playerOne = new Player(this, 1, charOne);
+        } else {
+            playerOne = new Cpu(this, 1, charOne);
+        }
         playerOne.x = 10;
         playerOne.y = 73;
         // playerTwo
-        playerTwo = new Player(this, 2, okTwo);
+        if (modeTwo == 1) {
+            playerTwo = new Player(this, 2, charTwo);
+        } else {
+            playerTwo = new Cpu(this, 2, charTwo);
+        }
         playerTwo.x = 150;
         playerTwo.y = 73;
         // background

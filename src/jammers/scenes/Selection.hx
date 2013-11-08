@@ -26,10 +26,16 @@ class Selection extends Scene
     private var characterBigName : TextField;
     private var cursorOne : Shape;
     private var cursorTwo : Shape;
+    private var modesOne : TextField;
+    private var modesTwo : TextField;
+    private var cursorModeOne : Shape;
+    private var cursorModeTwo : Shape;
     private var cdOne : Int;
     private var cdTwo : Int;
     private var okOne : Int;
     private var okTwo : Int;
+    private var okModeOne : Int;
+    private var okModeTwo : Int;
     private var channel : SoundChannel;
     
     public function new()
@@ -89,7 +95,7 @@ class Selection extends Scene
         characterBigName.y = 50;
         characterBigName.width = 43;
         addChild(characterBigName);
-        // players
+        // cursors
         cursorOne = new Shape();
         cursorOne.x = 25;
         cursorOne.y = 10;
@@ -109,6 +115,50 @@ class Selection extends Scene
         gTwo.drawRect(-3, -1, 2, 2);
         gTwo.drawRect(1, -1, 2, 2);
         addChild(cursorTwo);
+        // modes
+        var tfModeOne : TextFormat = new TextFormat(Library.getInstance().font.fontName, 11, 0x183840);
+        tfModeOne.align = TextFormatAlign.LEFT;
+        modesOne = new TextField();
+        modesOne.embedFonts = true;
+        modesOne.defaultTextFormat = tfModeOne;
+        modesOne.selectable = false;
+        modesOne.text = "Player\nCPU";
+        modesOne.x = 35;
+        modesOne.y = 90;
+        modesOne.width = 43;
+        addChild(modesOne);
+        var tfModeTwo : TextFormat = new TextFormat(Library.getInstance().font.fontName, 11, 0x183840);
+        tfModeTwo.align = TextFormatAlign.LEFT;
+        modesTwo = new TextField();
+        modesTwo.embedFonts = true;
+        modesTwo.defaultTextFormat = tfModeTwo;
+        modesTwo.selectable = false;
+        modesTwo.text = "Player\nCPU";
+        modesTwo.x = 100;
+        modesTwo.y = 90;
+        modesTwo.width = 43;
+        addChild(modesTwo);
+        // mode cursors
+        cursorModeOne = new Shape();
+        cursorModeOne.x = 25;
+        cursorModeOne.y = 96;
+        var gModeOne : Graphics = cursorModeOne.graphics;
+        gModeOne.clear();
+        gModeOne.beginFill(0x183840);
+        gModeOne.drawCircle(0, 0, 5);
+        gModeOne.drawRect(-1, -1, 2, 2);
+        addChild(cursorModeOne);
+        cursorModeTwo = new Shape();
+        cursorModeTwo.x = 90;
+        cursorModeTwo.y = 96;
+        var gModeTwo : Graphics = cursorModeTwo.graphics;
+        gModeTwo.clear();
+        gModeTwo.beginFill(0x183840);
+        gModeTwo.drawCircle(0, 0, 5);
+        gModeTwo.drawRect(-3, -1, 2, 2);
+        gModeTwo.drawRect(1, -1, 2, 2);
+        addChild(cursorModeTwo);
+        // players
         okOne = 0;
         okTwo = 0;
         cdOne = 0;
@@ -137,11 +187,19 @@ class Selection extends Scene
                         cursorOne.x -= 45;
                         cdOne = 10;
                     }
-                }
-                else if (true == keys[Keyboard.D]) {
+                } else if (true == keys[Keyboard.D]) {
                     if (cursorOne.x < 115) {
                         cursorOne.x += 45;
                         cdOne = 10;
+                    }
+                }
+                if (true == keys[Keyboard.Z] || true == keys[Keyboard.W]) {
+                    if (cursorModeOne.y == 106) {
+                        cursorModeOne.y = 96;
+                    }
+                } else if (true == keys[Keyboard.S]) {
+                    if (cursorModeOne.y == 96) {
+                        cursorModeOne.y = 106;
                     }
                 }
             } else {
@@ -149,6 +207,7 @@ class Selection extends Scene
             }
             if (true == keys[Keyboard.T]) {
                 okOne = 1 + Math.floor(cursorOne.x / 45);
+                okModeOne = (cursorModeOne.y == 96 ? 1 : 2);
                 Library.getInstance().soundThrow.play();
             }
         }
@@ -160,11 +219,19 @@ class Selection extends Scene
                         cursorTwo.x -= 45;
                         cdTwo = 10;
                     }
-                }
-                else if (true == keys[Keyboard.RIGHT]) {
+                } else if (true == keys[Keyboard.RIGHT]) {
                     if (cursorTwo.x < 130) {
                         cursorTwo.x += 45;
                         cdTwo = 10;
+                    }
+                }
+                if (true == keys[Keyboard.UP]) {
+                    if (cursorModeTwo.y == 106) {
+                        cursorModeTwo.y = 96;
+                    }
+                } else if (true == keys[Keyboard.DOWN]) {
+                    if (cursorModeTwo.y == 96) {
+                        cursorModeTwo.y = 106;
                     }
                 }
             } else {
@@ -172,12 +239,13 @@ class Selection extends Scene
             }
             if (true == keys[Keyboard.O] || true == keys[Keyboard.NUMPAD_7]) {
                 okTwo = 1 + Math.floor(cursorTwo.x / 45);
+                okModeTwo = (cursorModeTwo.y == 96 ? 1 : 2);
                 Library.getInstance().soundThrow.play();
             }
         }
         // launch
         if (okOne != 0 && okTwo != 0) {
-            return new Playground(okOne, okTwo);
+            return new Playground(okOne, okTwo, okModeOne, okModeTwo);
         }
         return this;
     }
@@ -199,6 +267,10 @@ class Selection extends Scene
         removeChild(characterBigName);
         removeChild(cursorOne);
         removeChild(cursorTwo);
+        removeChild(modesOne);
+        removeChild(modesTwo);
+        removeChild(cursorModeOne);
+        removeChild(cursorModeTwo);
         channel.stop();
         channel.removeEventListener(Event.SOUND_COMPLETE, music);
     }
