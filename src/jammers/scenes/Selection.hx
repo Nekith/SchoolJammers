@@ -245,7 +245,11 @@ class Selection extends Scene
         }
         // launch
         if (okOne != 0 && okTwo != 0) {
-            return new Playground(okOne, okTwo, okModeOne, okModeTwo);
+            if (Std.random(3) == 2) {
+                return new ClassRoom(okOne, okTwo, okModeOne, okModeTwo);
+            } else {
+                return new Playground(okOne, okTwo, okModeOne, okModeTwo);
+            }
         }
         return this;
     }

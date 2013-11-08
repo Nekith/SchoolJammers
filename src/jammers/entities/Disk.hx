@@ -39,7 +39,7 @@ class Disk extends Sprite implements Entity
         level = scene;
         sheet = diskBitmap;
         shadow = new Bitmap(new BitmapData(16, 10, true));
-        shadow.bitmapData.copyPixels(sheet, new Rectangle(0, 20, 16, 10), new Point(0, 0));
+        shadow.bitmapData.copyPixels(sheet, new Rectangle(0, 40, 16, 10), new Point(0, 0));
         shadow.x = -8;
         shadow.y = -5;
         level.shadows.addChild(shadow);
@@ -119,12 +119,10 @@ class Disk extends Sprite implements Entity
         if (force.x != 0 || force.y != 0) {
             var vy : Int = 0;
             ++anim;
-            if (anim >= 30) {
-                vy = 0;
+            if (anim >= 32) {
                 anim = 0;
-            } else if (anim >= 15) {
-                vy = 10;
             }
+            vy = Math.floor(anim / 8) * 10;
             sprite.bitmapData.copyPixels(sheet, new Rectangle(0, vy, 16, 10), new Point(0, 0));
         }
         if (tossing != 0) {

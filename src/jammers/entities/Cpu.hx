@@ -50,7 +50,7 @@ class Cpu extends Player
                 isDefending = true;
             } else {
                 if (num == 1) {
-                    if (level.disk.force.x < 0 && level.disk.x <= zone.x) {
+                    if (level.disk.force.x < 0 && level.disk.x <= zone.x + zone.width) {
                         isDefending = true;
                     }
                 } else {
@@ -67,9 +67,9 @@ class Cpu extends Player
                         wantLeft = true;
                     }
                 }
-                if (level.disk.y > y) {
+                if (level.disk.y > y + speedWalk) {
                     wantDown = true;
-                } else if (level.disk.y < y) {
+                } else if (level.disk.y < y + speedWalk) {
                     wantUp = true;
                 }
             } else {
