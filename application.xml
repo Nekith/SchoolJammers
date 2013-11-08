@@ -6,7 +6,7 @@
 	<meta title="School Jammers" package="com.nekith.schooljammers" version="1.0.0" company="Errant Works" />
 	
 	<!-- output -->
-	<app main="jammers.Main" file="SchoolJammers" path="bin" />
+	<app main="jammers.Main" file="SchoolJammers" path="bin" preloader="jammers.Preloader" />
 	
 	<window background="#A8D090" fps="60" />
 	<window width="160" height="144" unless="mobile" />
@@ -19,6 +19,8 @@
 	
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />
+    
+    <assets path="assets" />
 	
 	<!-- optimize output
 	<haxeflag name="-dce full" /> -->

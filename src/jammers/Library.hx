@@ -3,28 +3,7 @@ package jammers;
 import flash.text.Font;
 import flash.display.BitmapData;
 import flash.media.Sound;
-
-@:font("assets/visitor1.ttf") class PixelFont extends Font { }
-@:bitmap("assets/gfx/title.png") class BitmapTitle extends BitmapData { }
-@:bitmap("assets/gfx/title_space.png") class BitmapTitleSpace extends BitmapData { }
-@:bitmap("assets/gfx/menu.png") class BitmapMenu extends BitmapData { }
-@:bitmap("assets/gfx/players.png") class BitmapPlayers extends BitmapData { }
-@:bitmap("assets/gfx/shadow.png") class BitmapShadow extends BitmapData { }
-@:bitmap("assets/gfx/stun.png") class BitmapStun extends BitmapData { }
-@:bitmap("assets/gfx/playground/background.png") class BitmapPlaygroundBackground extends BitmapData { }
-@:bitmap("assets/gfx/playground/foreground.png") class BitmapPlaygroundForeground extends BitmapData { }
-@:bitmap("assets/gfx/playground/disk.png") class BitmapPlaygroundDisk extends BitmapData { }
-@:bitmap("assets/gfx/class/background.png") class BitmapClassBackground extends BitmapData { }
-@:bitmap("assets/gfx/class/foreground.png") class BitmapClassForeground extends BitmapData { }
-@:bitmap("assets/gfx/class/disk.png") class BitmapClassDisk extends BitmapData { }
-@:sound("assets/sfx/title.mp3") class MusicTitle extends Sound { }
-@:sound("assets/sfx/game.mp3") class MusicGame extends Sound { }
-@:sound("assets/sfx/bounce.wav") class SoundBounce extends Sound { }
-@:sound("assets/sfx/catch.wav") class SoundCatch extends Sound { }
-@:sound("assets/sfx/stun.wav") class SoundStun extends Sound { }
-@:sound("assets/sfx/throw.wav") class SoundThrow extends Sound { }
-@:sound("assets/sfx/dash.wav") class SoundDash extends Sound { }
-@:sound("assets/sfx/goal.wav") class SoundGoal extends Sound { }
+import openfl.Assets;
 
 class Library
 {
@@ -62,26 +41,26 @@ class Library
     
     private function new()
     {
-        font = new PixelFont();
-        title = new BitmapTitle(0, 0);
-        titleSpace = new BitmapTitleSpace(0, 0);
-        menu = new BitmapMenu(0, 0);
-        players = new BitmapPlayers(0, 0);
-        shadow = new BitmapShadow(0, 0);
-        stun = new BitmapStun(0, 0);
-        playgroundBackground = new BitmapPlaygroundBackground(0, 0);
-        playgroundForeground = new BitmapPlaygroundForeground(0, 0);
-        playgroundDisk = new BitmapPlaygroundDisk(0, 0);
-        classBackground = new BitmapClassBackground(0, 0);
-        classForeground = new BitmapClassForeground(0, 0);
-        classDisk = new BitmapClassDisk(0, 0);
-        musicTitle = new MusicTitle();
-        musicGame = new MusicGame();
-        soundBounce = new SoundBounce();
-        soundCatch = new SoundCatch();
-        soundStun = new SoundStun();
-        soundThrow = new SoundThrow();
-        soundDash = new SoundDash();
-        soundGoal = new SoundGoal();
+        font = Assets.getFont("assets/visitor1.ttf");
+        title = Assets.getBitmapData("assets/gfx/title.png");
+        titleSpace = Assets.getBitmapData("assets/gfx/title_space.png");
+        menu = Assets.getBitmapData("assets/gfx/menu.png");
+        players = Assets.getBitmapData("assets/gfx/players.png");
+        shadow = Assets.getBitmapData("assets/gfx/shadow.png");
+        stun = Assets.getBitmapData("assets/gfx/stun.png");
+        playgroundBackground = Assets.getBitmapData("assets/gfx/playground/background.png");
+        playgroundForeground = Assets.getBitmapData("assets/gfx/playground/foreground.png");
+        playgroundDisk = Assets.getBitmapData("assets/gfx/playground/disk.png");
+        classBackground = Assets.getBitmapData("assets/gfx/class/background.png");
+        classForeground = Assets.getBitmapData("assets/gfx/class/foreground.png");
+        classDisk = Assets.getBitmapData("assets/gfx/class/disk.png");
+        musicTitle = Assets.getSound("assets/sfx/title.mp3");
+        musicGame = Assets.getSound("assets/sfx/game.mp3");
+        soundBounce = Assets.getSound("assets/sfx/bounce.wav");
+        soundCatch = Assets.getSound("assets/sfx/catch.wav");
+        soundStun = Assets.getSound("assets/sfx/stun.wav");
+        soundThrow = Assets.getSound("assets/sfx/throw.wav");
+        soundDash = Assets.getSound("assets/sfx/dash.wav");
+        soundGoal = Assets.getSound("assets/sfx/goal.wav");
     }
 }
