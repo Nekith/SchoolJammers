@@ -14,6 +14,9 @@ import flash.media.Sound;
 @:bitmap("assets/gfx/playground/background.png") class BitmapPlaygroundBackground extends BitmapData { }
 @:bitmap("assets/gfx/playground/foreground.png") class BitmapPlaygroundForeground extends BitmapData { }
 @:bitmap("assets/gfx/playground/disk.png") class BitmapPlaygroundDisk extends BitmapData { }
+@:bitmap("assets/gfx/class/background.png") class BitmapClassBackground extends BitmapData { }
+@:bitmap("assets/gfx/class/foreground.png") class BitmapClassForeground extends BitmapData { }
+@:bitmap("assets/gfx/class/disk.png") class BitmapClassDisk extends BitmapData { }
 @:sound("assets/sfx/title.mp3") class MusicTitle extends Sound { }
 @:sound("assets/sfx/game.mp3") class MusicGame extends Sound { }
 @:sound("assets/sfx/bounce.wav") class SoundBounce extends Sound { }
@@ -37,6 +40,9 @@ class Library
     public var playgroundBackground(default, null) : BitmapData;
     public var playgroundForeground(default, null) : BitmapData;
     public var playgroundDisk(default, null) : BitmapData;
+    public var classBackground(default, null) : BitmapData;
+    public var classForeground(default, null) : BitmapData;
+    public var classDisk(default, null) : BitmapData;
     public var musicTitle(default, null) : Sound;
     public var musicGame(default, null) : Sound;
     public var soundBounce(default, null) : Sound;
@@ -66,6 +72,9 @@ class Library
         playgroundBackground = new BitmapPlaygroundBackground(0, 0);
         playgroundForeground = new BitmapPlaygroundForeground(0, 0);
         playgroundDisk = new BitmapPlaygroundDisk(0, 0);
+        classBackground = new BitmapClassBackground(0, 0);
+        classForeground = new BitmapClassForeground(0, 0);
+        classDisk = new BitmapClassDisk(0, 0);
         musicTitle = new MusicTitle();
         musicGame = new MusicGame();
         soundBounce = new SoundBounce();
