@@ -1,15 +1,29 @@
 # School Jammers
 
-Entry for [One Game A Month](http://www.onegameamonth.com "One Game A Month") June 2013.
+Entry for [Game Boy Jam 2](http://gbjam.net "Game Boy Jam") and [One Game A Month](http://www.onegameamonth.com "One Game A Month") June 2013.
 Yeah, in November.
 
-And I've decided that it will also be a [Game Boy Jam 2](http://gbjam.net "Game Boy Jam") entry.
+And no, I didn't compose the music.
+Obviously.
 
 ## How To Play
 
-You need two players on the same computer.
-And a keyboard handling several key strokes simultaneously.
-Just try. At least, if you lose, you can blame the keyboard.
+It's a lite Windjammers-like game.
+
+Two kids play with a frisbee in a volley-ball/handball mix.
+Something like that.
+
+There's a simple CPU mode but it's a game meant to be played against another human.
+
+### Rules
+
+You hit the goal (it's the far-left and far-right zones), you mark 3 points.
+
+You toss the disk and your adversary don't catch it, you mark 2 points.
+
+At 11 points, you win a round.
+
+A 2 rounds, you win the game.
 
 ### Controls
 
@@ -24,16 +38,6 @@ Player 2 :
 * Up Left Down Right : movement / throw direction
 * O/Numpad 7 : throw / charging / ok
 * P/Numpad 8 : toss / dash
-
-### Rules
-
-You hit the goal (it's the far-left and far-right zones), you mark 3 points.
-
-You toss the disk and your adversary don't catch it, you mark 2 points.
-
-At 11 points, you win a round.
-
-A 2 rounds, you win the game.
 
 ### Moves
 
